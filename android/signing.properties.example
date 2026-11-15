@@ -1,0 +1,8 @@
+# Copy this file to android/signing.properties (never commit real passwords)
+# Or pass values via environment variables when running `npm run export-android`
+
+storeFile=./android.keystore
+storePassword=REPLACE_WITH_KEYSTORE_PASSWORD
+keyAlias=allinoneskill
+keyPassword=REPLACE_WITH_KEY_PASSWORD
+sha256Fingerprint=00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00

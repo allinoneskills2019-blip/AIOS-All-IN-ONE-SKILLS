@@ -1,0 +1,48 @@
+{
+  "packageId": "com.allinoneskill.mumbai",
+  "host": "ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app",
+  "name": "All in One Skill",
+  "launcherName": "AllInOne",
+  "display": "standalone",
+  "themeColor": "#0F172A",
+  "themeColorDark": "#0F172A",
+  "navigationColor": "#0F172A",
+  "navigationColorDark": "#0F172A",
+  "navigationDividerColor": "#E2E8F0",
+  "navigationDividerColorDark": "#1E293B",
+  "backgroundColor": "#F8FAFC",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/pwa-512x512.png",
+  "maskableIconUrl": "https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/pwa-maskable-512x512.png",
+  "monochromeIconUrl": "https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/pwa-192x192.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "allinoneskill"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1.0.0"
+}

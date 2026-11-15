@@ -1,0 +1,6 @@
+{
+  "name": "All in One Skill",
+  "description": "AI-powered service, product, contractor, and skilled workforce marketplace starting in Mumbai, Maharashtra.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

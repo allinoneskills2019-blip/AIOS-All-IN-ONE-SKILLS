@@ -1,0 +1,63 @@
+name: Build Android APK & AAB
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android/**'
+      - '.github/workflows/build-android-apk.yml'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Prepare Bubblewrap keystore & project
+        run: |
+          mkdir -p android/.bubblewrap-project android/output
+          cp android/twa-manifest.json android/.bubblewrap-project/twa-manifest.json
+          cd android/.bubblewrap-project
+          if [ ! -f android.keystore ]; then
+            keytool -genkeypair -v \
+              -keystore android.keystore \
+              -alias allinoneskill \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'allinoneskill123' }}" \
+              -keypass "${{ secrets.ANDROID_KEY_PASSWORD || 'allinoneskill123' }}" \
+              -dname "CN=All in One Skill, OU=Mobile, O=All in One Skill, L=Mumbai, S=Maharashtra, C=IN"
+          fi
+
+      - name: Build Android APK & AAB via Bubblewrap
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD || 'allinoneskill123' }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD || 'allinoneskill123' }}
+        run: |
+          cd android/.bubblewrap-project
+          npx --yes @bubblewrap/cli update --manifest="https://ais-pre-qo3kxiduq6rs3dhqtxynxu-828642031036.asia-northeast1.run.app/manifest.webmanifest" --skipVersionUpgrade || true
+          npx --yes @bubblewrap/cli build --skipPwaValidation
+          [ -f app-release-signed.apk ] && cp app-release-signed.apk ../output/all-in-one-skill-release.apk
+          [ -f app-release-bundle.aab ] && cp app-release-bundle.aab ../output/all-in-one-skill-playstore.aab
+
+      - name: Upload APK and AAB artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-in-one-skill-android-builds
+          path: |
+            android/output/*.apk
+            android/output/*.aab

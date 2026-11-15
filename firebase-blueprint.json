@@ -1,0 +1,577 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Core authenticated account metadata and active role.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["customer", "shopkeeper", "contractor", "technician", "admin"] },
+        "phoneVerified": { "type": "boolean" },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "role", "phoneVerified", "clusterZone", "createdAt", "updatedAt"]
+    },
+    "UserPrivatePII": {
+      "title": "UserPrivatePII",
+      "description": "Strictly isolated private contact, address, and KYC reference fields.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "phone": { "type": "string", "minLength": 6, "maxLength": 24 },
+        "email": { "type": "string", "maxLength": 160 },
+        "fullAddress": { "type": "string", "maxLength": 300 },
+        "kycStatus": { "type": "string", "enum": ["unsubmitted", "pending", "verified", "rejected"] },
+        "aadhaarLast4": { "type": "string", "maxLength": 4 },
+        "upiOrBankRef": { "type": "string", "maxLength": 120 },
+        "whatsappOptIn": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "phone", "kycStatus", "whatsappOptIn", "updatedAt"]
+    },
+    "TechnicianProfile": {
+      "title": "TechnicianProfile",
+      "description": "Public skilled worker profile with zero private PII.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "fullName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "photoUrl": { "type": "string", "maxLength": 80000 },
+        "skillCategory": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "subcategory": { "type": "string", "maxLength": 80 },
+        "experienceYears": { "type": "number" },
+        "experienceCategory": { "type": "string", "enum": ["A", "B", "C"] },
+        "adminGrade": { "type": "string", "enum": ["A", "B", "C", "Pending"] },
+        "adminGradeNotes": { "type": "string", "maxLength": 400 },
+        "mockTestScore": { "type": "number" },
+        "mockTestStatus": { "type": "string", "enum": ["Not Taken", "Submitted"] },
+        "fieldTestScore": { "type": "number" },
+        "fieldTestStatus": { "type": "string", "enum": ["Pending", "Scheduled", "Passed", "Needs Retest"] },
+        "credentialsCount": { "type": "number" },
+        "credentialDocIds": { "type": "array" },
+        "workDescription": { "type": "string", "maxLength": 800 },
+        "previousWorkPhotos": { "type": "array" },
+        "preferredLocations": { "type": "array" },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "workingRadiusKm": { "type": "number" },
+        "workPreference": { "type": "string", "enum": ["daily", "monthly", "both"] },
+        "expectedCharge": { "type": "number" },
+        "hourlyRate": { "type": "number" },
+        "calloutFee": { "type": "number" },
+        "upiId": { "type": "string", "maxLength": 120 },
+        "availabilityStatus": { "type": "string", "enum": ["Available", "Busy", "Unavailable"] },
+        "busySlots": { "type": "array" },
+        "ratingAvg": { "type": "number" },
+        "ratingCount": { "type": "number" },
+        "lastReviewBookingId": { "type": "string", "maxLength": 128 },
+        "completedJobsCount": { "type": "number" },
+        "verified": { "type": "boolean" },
+        "membershipStatus": { "type": "string", "enum": ["none", "active", "expired"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "fullName", "skillCategory", "experienceYears", "clusterZone", "workingRadiusKm", "workPreference", "expectedCharge", "availabilityStatus", "verified", "createdAt", "updatedAt"]
+    },
+    "ShopProfile": {
+      "title": "ShopProfile",
+      "description": "Public shopkeeper storefront profile.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shopName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "ownerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "address": { "type": "string", "minLength": 4, "maxLength": 240 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "sellerPlan": { "type": "string", "enum": ["Standard", "Growth", "Enterprise"] },
+        "verified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "shopName", "ownerName", "address", "clusterZone", "sellerPlan", "verified", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Shopkeeper hardware, electrical, or construction product listing.",
+      "type": "object",
+      "properties": {
+        "shopId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shopName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "name": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "imageUrl": { "type": "string", "maxLength": 500 },
+        "price": { "type": "number" },
+        "stock": { "type": "number" },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "isPromoted": { "type": "boolean" },
+        "promotionNote": { "type": "string", "maxLength": 200 },
+        "memberDiscountPercent": { "type": "number" },
+        "shippingAvailable": { "type": "boolean" },
+        "shippingFee": { "type": "number" },
+        "courierPartner": { "type": "string", "maxLength": 80 },
+        "deliveryEta": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["shopId", "ownerId", "shopName", "name", "category", "price", "stock", "clusterZone", "isPromoted", "createdAt", "updatedAt"]
+    },
+    "ContractorProfile": {
+      "title": "ContractorProfile",
+      "description": "Registered construction contractor company and active package tier.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "companyName": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "contactName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "specialization": { "type": "string", "maxLength": 120 },
+        "licenseNumber": { "type": "string", "maxLength": 80 },
+        "pastWorkHistory": { "type": "string", "maxLength": 1000 },
+        "packageTier": { "type": "string", "enum": ["None", "Basic", "Professional", "Premium"] },
+        "profilesAccessed": { "type": "number" },
+        "leadQuotaLimit": { "type": "number" },
+        "leadQuotaUsed": { "type": "number" },
+        "membershipExpiresAt": { "type": "string", "maxLength": 40 },
+        "verified": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "companyName", "contactName", "clusterZone", "packageTier", "profilesAccessed", "verified", "createdAt", "updatedAt"]
+    },
+    "ProjectRequirement": {
+      "title": "ProjectRequirement",
+      "description": "Contractor construction project and skilled workforce requirement.",
+      "type": "object",
+      "properties": {
+        "contractorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "companyName": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "title": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "requiredSkill": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "workersNeeded": { "type": "number" },
+        "hiredCount": { "type": "number" },
+        "engagementType": { "type": "string", "enum": ["daily", "monthly", "contract"] },
+        "budgetPerWorker": { "type": "number" },
+        "status": { "type": "string", "enum": ["Open", "In Progress", "Completed", "Cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["contractorId", "companyName", "title", "clusterZone", "requiredSkill", "workersNeeded", "hiredCount", "engagementType", "budgetPerWorker", "status", "createdAt", "updatedAt"]
+    },
+    "WorkforceHire": {
+      "title": "WorkforceHire",
+      "description": "Assignment of a technician to a contractor project.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectTitle": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "contractorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "engagementType": { "type": "string", "enum": ["daily", "monthly", "contract"] },
+        "agreedRate": { "type": "number" },
+        "status": { "type": "string", "enum": ["Requested", "Active", "Completed", "Declined"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "projectTitle", "contractorId", "technicianId", "technicianName", "engagementType", "agreedRate", "status", "createdAt", "updatedAt"]
+    },
+    "ServiceBooking": {
+      "title": "ServiceBooking",
+      "description": "Customer service booking routed by Mumbai cluster and technician availability.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "technicianId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "skillCategory": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "serviceNotes": { "type": "string", "maxLength": 600 },
+        "scheduledDate": { "type": "string", "maxLength": 40 },
+        "scheduledSlot": { "type": "string", "maxLength": 40 },
+        "priority": { "type": "string", "enum": ["Standard", "Urgent"] },
+        "status": { "type": "string", "enum": ["Requested", "Accepted", "In Progress", "Completed", "Cancelled", "Rejected"] },
+        "serviceCharge": { "type": "number" },
+        "bookingFee": { "type": "number" },
+        "commissionAmount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "estimatedHours": { "type": "number" },
+        "hourlyRateSnapshot": { "type": "number" },
+        "calloutFeeSnapshot": { "type": "number" },
+        "discountApplied": { "type": "number" },
+        "loyaltyPointsRedeemed": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Wallet", "Card"] },
+        "paymentStatus": { "type": "string", "enum": ["Unpaid", "Pending Verification", "Verified"] },
+        "paymentReference": { "type": "string", "maxLength": 100 },
+        "progressLabel": { "type": "string", "enum": ["Diagnostic complete", "Parts ordered", "Repair in progress", "Out for delivery"] },
+        "progressNote": { "type": "string", "maxLength": 300 },
+        "rating": { "type": "number" },
+        "reviewText": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "customerName", "technicianId", "technicianName", "skillCategory", "clusterZone", "scheduledDate", "status", "serviceCharge", "bookingFee", "commissionAmount", "totalAmount", "paymentStatus", "createdAt", "updatedAt"]
+    },
+    "ProductOrder": {
+      "title": "ProductOrder",
+      "description": "Customer product order placed with a shopkeeper.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "shopId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shopOwnerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "productId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "productName": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "quantity": { "type": "number" },
+        "unitPrice": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "memberDiscountApplied": { "type": "number" },
+        "shippingFee": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Wallet", "Card"] },
+        "shippingAddress": { "type": "string", "maxLength": 300 },
+        "courierName": { "type": "string", "maxLength": 80 },
+        "trackingId": { "type": "string", "maxLength": 80 },
+        "shippingStatus": { "type": "string", "enum": ["Packed", "Shipped", "In Transit", "Out for Delivery", "Delivered"] },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "status": { "type": "string", "enum": ["Placed", "Confirmed", "Dispatched", "Delivered", "Cancelled"] },
+        "paymentStatus": { "type": "string", "enum": ["Unpaid", "Pending Verification", "Verified"] },
+        "paymentReference": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "customerName", "shopId", "shopOwnerId", "productId", "productName", "quantity", "unitPrice", "totalAmount", "clusterZone", "status", "paymentStatus", "createdAt", "updatedAt"]
+    },
+    "Enquiry": {
+      "title": "Enquiry",
+      "description": "Customer enquiry to a shopkeeper regarding products.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "shopId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shopOwnerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "productId": { "type": "string", "maxLength": 128 },
+        "message": { "type": "string", "minLength": 2, "maxLength": 600 },
+        "reply": { "type": "string", "maxLength": 600 },
+        "status": { "type": "string", "enum": ["Open", "Replied", "Closed"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerId", "customerName", "shopId", "shopOwnerId", "message", "status", "createdAt", "updatedAt"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "Dispute or complaint filed for Admin review.",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "reporterName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "reporterRole": { "type": "string", "enum": ["customer", "shopkeeper", "contractor", "technician"] },
+        "subject": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 5, "maxLength": 1000 },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["Open", "Under Review", "Resolved", "Escalated"] },
+        "resolutionNote": { "type": "string", "maxLength": 600 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reporterId", "reporterName", "reporterRole", "subject", "description", "status", "createdAt", "updatedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app and communication dispatch notification record.",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "body": { "type": "string", "minLength": 2, "maxLength": 500 },
+        "channel": { "type": "string", "enum": ["in_app", "sms_otp", "whatsapp"] },
+        "category": { "type": "string", "enum": ["booking", "job", "payment", "subscription", "system"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["recipientId", "title", "body", "channel", "category", "read", "createdAt"]
+    },
+    "ZoneCluster": {
+      "title": "ZoneCluster",
+      "description": "Mumbai service cluster and admin-configured sub-zones.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "city": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "state": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "subZones": { "type": "array" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "city", "state", "subZones", "active", "createdAt", "updatedAt"]
+    },
+    "PlatformConfig": {
+      "title": "PlatformConfig",
+      "description": "Admin-configurable fees, commissions, and subscription packages.",
+      "type": "object",
+      "properties": {
+        "bookingCommissionPercent": { "type": "number" },
+        "customerBookingCharge": { "type": "number" },
+        "technicianMonthlyFee": { "type": "number" },
+        "technicianYearlyFee": { "type": "number" },
+        "shopkeeperPlans": { "type": "array" },
+        "contractorPackages": { "type": "array" },
+        "promotionDailyRate": { "type": "number" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["bookingCommissionPercent", "customerBookingCharge", "technicianMonthlyFee", "technicianYearlyFee", "shopkeeperPlans", "contractorPackages", "promotionDailyRate", "updatedAt"]
+    },
+    "AIDecisionProposal": {
+      "title": "AIDecisionProposal",
+      "description": "AI Management Team directive or action proposal governed by admin approval.",
+      "type": "object",
+      "properties": {
+        "agentRole": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "zone": { "type": "string", "maxLength": 64 },
+        "title": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "summary": { "type": "string", "minLength": 5, "maxLength": 1500 },
+        "recommendedAction": { "type": "string", "maxLength": 400 },
+        "requiresApproval": { "type": "boolean" },
+        "approvalStatus": { "type": "string", "enum": ["Pending", "Approved", "Rejected", "Informational"] },
+        "approvedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["agentRole", "title", "summary", "requiresApproval", "approvalStatus", "createdAt", "updatedAt"]
+    },
+    "RevenueTransaction": {
+      "title": "RevenueTransaction",
+      "description": "Verified payment, commission, membership, or package transaction.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "txType": { "type": "string", "enum": ["booking_payment", "order_payment", "technician_membership", "contractor_package", "seller_plan", "product_promotion", "wallet_topup", "wallet_payment"] },
+        "amount": { "type": "number" },
+        "commissionAmount": { "type": "number" },
+        "referenceId": { "type": "string", "maxLength": 128 },
+        "utrReference": { "type": "string", "minLength": 4, "maxLength": 100 },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Wallet", "Card"] },
+        "status": { "type": "string", "enum": ["Pending Verification", "Verified", "Rejected"] },
+        "verifiedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "txType", "amount", "commissionAmount", "utrReference", "status", "createdAt", "updatedAt"]
+    },
+    "TechnicianTestAttempt": {
+      "title": "TechnicianTestAttempt",
+      "description": "Field-specific mock test attempt and admin practical field test grade.",
+      "type": "object",
+      "properties": {
+        "technicianId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "skillCategory": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "experienceYears": { "type": "number" },
+        "experienceCategory": { "type": "string", "enum": ["A", "B", "C"] },
+        "mockScore": { "type": "number" },
+        "correctAnswers": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "practicalSelfChecklist": { "type": "array" },
+        "fieldReadinessNotes": { "type": "string", "maxLength": 600 },
+        "fieldTestStatus": { "type": "string", "enum": ["Pending", "Scheduled", "Passed", "Needs Retest"] },
+        "fieldTestScore": { "type": "number" },
+        "assignedGrade": { "type": "string", "enum": ["A", "B", "C", "Pending"] },
+        "adminRemarks": { "type": "string", "maxLength": 500 },
+        "gradedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["technicianId", "technicianName", "skillCategory", "experienceYears", "experienceCategory", "mockScore", "correctAnswers", "totalQuestions", "practicalSelfChecklist", "fieldTestStatus", "assignedGrade", "createdAt", "updatedAt"]
+    },
+    "TechnicianCredential": {
+      "title": "TechnicianCredential",
+      "description": "Private technician certificate, license, or degree document stored in Firebase Storage and linked in Firestore for admin verification.",
+      "type": "object",
+      "properties": {
+        "technicianId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "docType": { "type": "string", "enum": ["Certificate", "License", "Degree"] },
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "issuer": { "type": "string", "maxLength": 120 },
+        "fileName": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "mimeType": { "type": "string", "minLength": 3, "maxLength": 80 },
+        "fileSize": { "type": "number" },
+        "storagePath": { "type": "string", "maxLength": 400 },
+        "downloadUrl": { "type": "string", "maxLength": 2000 },
+        "fileDataUrl": { "type": "string", "minLength": 10, "maxLength": 200000 },
+        "verificationStatus": { "type": "string", "enum": ["Pending", "Verified", "Rejected"] },
+        "adminNote": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["technicianId", "technicianName", "docType", "title", "fileName", "mimeType", "verificationStatus", "createdAt", "updatedAt"]
+    },
+    "TechnicianReview": {
+      "title": "TechnicianReview",
+      "description": "Verified customer star rating and text review created after a completed technician booking.",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "technicianName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "customerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "customerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "skillCategory": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "rating": { "type": "number" },
+        "reviewText": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["bookingId", "technicianId", "technicianName", "customerId", "customerName", "skillCategory", "clusterZone", "rating", "reviewText", "createdAt", "updatedAt"]
+    },
+    "SavedFavorite": {
+      "title": "SavedFavorite",
+      "description": "User-bookmarked favorite technician, contractor, or shop profile stored under the user's private subcollection.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetType": { "type": "string", "enum": ["technician", "contractor", "shop"] },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetName": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "category": { "type": "string", "maxLength": 80 },
+        "clusterZone": { "type": "string", "minLength": 2, "maxLength": 64 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "targetType", "targetId", "targetName", "clusterZone", "createdAt"]
+    },
+    "UserWallet": {
+      "title": "UserWallet",
+      "description": "User digital wallet balance and transaction summary.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "balance": { "type": "number" },
+        "totalCredited": { "type": "number" },
+        "totalSpent": { "type": "number" },
+        "lastTransactionRef": { "type": "string", "maxLength": 120 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "balance", "totalCredited", "totalSpent", "updatedAt"]
+    },
+    "UserRewards": {
+      "title": "UserRewards",
+      "description": "User loyalty points balance and rewards tier.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "pointsBalance": { "type": "number" },
+        "lifetimeEarned": { "type": "number" },
+        "lifetimeRedeemed": { "type": "number" },
+        "tier": { "type": "string", "enum": ["Silver", "Gold", "Platinum"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "pointsBalance", "lifetimeEarned", "lifetimeRedeemed", "tier", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "User account role and cluster zone."
+    },
+    "/users/{userId}/private/{docId}": {
+      "schema": { "$ref": "#/entities/UserPrivatePII" },
+      "description": "Private PII and KYC details isolated to owner and admin."
+    },
+    "/users/{userId}/savedFavorites/{favoriteId}": {
+      "schema": { "$ref": "#/entities/SavedFavorite" },
+      "description": "User bookmarks for preferred technicians, contractors, and shops."
+    },
+    "/users/{userId}/wallet/{docId}": {
+      "schema": { "$ref": "#/entities/UserWallet" },
+      "description": "User digital wallet balance and ledger summary."
+    },
+    "/users/{userId}/rewards/{docId}": {
+      "schema": { "$ref": "#/entities/UserRewards" },
+      "description": "Customer loyalty points and membership rewards tier."
+    },
+    "/technicians/{techId}": {
+      "schema": { "$ref": "#/entities/TechnicianProfile" },
+      "description": "Public technician profiles without private PII."
+    },
+    "/shops/{shopId}": {
+      "schema": { "$ref": "#/entities/ShopProfile" },
+      "description": "Public shopkeeper storefronts."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Marketplace products listed by shopkeepers."
+    },
+    "/contractors/{contractorId}": {
+      "schema": { "$ref": "#/entities/ContractorProfile" },
+      "description": "Public contractor profiles and package tier."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/ProjectRequirement" },
+      "description": "Construction projects and workforce requirements."
+    },
+    "/hires/{hireId}": {
+      "schema": { "$ref": "#/entities/WorkforceHire" },
+      "description": "Workforce hire agreements between contractors and technicians."
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/ServiceBooking" },
+      "description": "Customer service bookings."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/ProductOrder" },
+      "description": "Customer product orders."
+    },
+    "/enquiries/{enquiryId}": {
+      "schema": { "$ref": "#/entities/Enquiry" },
+      "description": "Customer product enquiries to shopkeepers."
+    },
+    "/complaints/{complaintId}": {
+      "schema": { "$ref": "#/entities/Complaint" },
+      "description": "Customer and partner complaints/disputes."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "User-scoped notifications."
+    },
+    "/zones/{zoneId}": {
+      "schema": { "$ref": "#/entities/ZoneCluster" },
+      "description": "Mumbai service zones and sub-zones."
+    },
+    "/platformConfig/{configId}": {
+      "schema": { "$ref": "#/entities/PlatformConfig" },
+      "description": "Admin-configurable revenue, fees, and subscription packages."
+    },
+    "/aiDecisions/{decisionId}": {
+      "schema": { "$ref": "#/entities/AIDecisionProposal" },
+      "description": "AI management proposals requiring admin review."
+    },
+    "/transactions/{txId}": {
+      "schema": { "$ref": "#/entities/RevenueTransaction" },
+      "description": "Payment and commission ledger."
+    },
+    "/technicianTests/{testId}": {
+      "schema": { "$ref": "#/entities/TechnicianTestAttempt" },
+      "description": "Technician field mock tests and admin grading records."
+    },
+    "/technicianCredentials/{credId}": {
+      "schema": { "$ref": "#/entities/TechnicianCredential" },
+      "description": "Technician uploaded certificates, licenses, and degrees restricted to owner and admin."
+    },
+    "/technicianReviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/TechnicianReview" },
+      "description": "Publicly readable customer star ratings and text reviews linked to completed service bookings."
+    }
+  }
+}
