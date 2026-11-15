@@ -16,7 +16,7 @@ function readInitialLanguage(): AppLanguage {
   if (typeof window === 'undefined') return 'en';
   try {
     const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (stored === 'mr' || stored === 'en') return stored;
+    if (stored === 'mr' || stored === 'hi' || stored === 'en') return stored;
   } catch {
     // Ignore storage read errors in restricted iframe contexts
   }
@@ -28,7 +28,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.documentElement.lang = language === 'mr' ? 'mr' : 'en';
+      document.documentElement.lang = language;
     }
     try {
       window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
@@ -42,7 +42,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   const toggleLanguage = useCallback(() => {
-    setLanguageState((prev) => (prev === 'en' ? 'mr' : 'en'));
+    setLanguageState((prev) => (prev === 'en' ? 'hi' : prev === 'hi' ? 'mr' : 'en'));
   }, []);
 
   const value: LanguageContextValue = {

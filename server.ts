@@ -2,9 +2,9 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
+import { GoogleGenAI, Type } from '@google/genai';
 import { getDistanceToZoneKm, getTechnicianDistanceFromOrigin } from './src/lib/geo';
-import { MUMBAI_INITIAL_CLUSTERS } from './src/lib/constants';
+import { MUMBAI_INITIAL_CLUSTERS, SKILL_CATEGORIES } from './src/lib/constants';
 
 dotenv.config();
 
@@ -278,22 +278,118 @@ Return JSON with an array "recommendations" containing objects { "id": string, "
     }
   });
 
-  // AI Voice Assistant: Helps customers find services, check Mumbai availability, and guide bookings
-  const parseLocalVoiceIntent = (rawQuery: string, language?: string, defaultZone?: string) => {
+  // AI Voice Assistant: Helps customers find services, check Mumbai availability, and guide bookings in Hindi, Marathi, and English
+  const ZONE_ALIAS_MAP: Array<[string[], string]> = [
+    [['अंधेरी', 'अंधेरी पूर्व', 'अंधेरी पश्चिम', 'लोखंडवाला'], 'Andheri'],
+    [['बांद्रा', 'वांद्रे', 'bkc', 'पाली हिल'], 'Bandra'],
+    [['दादर', 'शिवाजी पार्क'], 'Dadar'],
+    [['बोरीवली', 'बोरिवली'], 'Borivali'],
+    [['कोलाबा', 'कुलाबा', 'कफ परेड'], 'Colaba'],
+    [['माहिम', 'माहीम'], 'Mahim'],
+    [['खार'], 'Khar'],
+    [['सांताक्रूज', 'सांताक्रूझ', 'कलिना'], 'Santacruz'],
+    [['जोगेश्वरी', 'ओशिवरा'], 'Jogeshwari'],
+    [['पवई', 'हिरानंदानी'], 'Powai'],
+    [['घाटकोपर'], 'Ghatkopar'],
+    [['कुर्ला'], 'Kurla'],
+    [['चेंबूर'], 'Chembur'],
+    [['मुलुंड'], 'Mulund'],
+    [['भांडुप'], 'Bhandup'],
+    [['विक्रोली'], 'Vikhroli'],
+    [['कांजूरमार्ग'], 'Kanjurmarg'],
+    [['मालाड'], 'Malad'],
+    [['कांदिवली'], 'Kandivali'],
+    [['गोरेगांव', 'गोरेगाव'], 'Goregaon'],
+    [['दहिसर'], 'Dahisar'],
+    [['जुहू'], 'Juhu'],
+    [['विले पार्ले', 'पार्ले'], 'Vile Parle'],
+    [['सायन', 'शीव'], 'Sion'],
+    [['परेल', 'परळ'], 'Parel'],
+    [['लोअर परेल', 'लोअर परळ'], 'Lower Parel'],
+    [['वरळी', 'वर्ली'], 'Worli'],
+    [['प्रभादेवी'], 'Prabhadevi'],
+    [['माटुंगा'], 'Matunga'],
+    [['भायखला', 'भयखळा'], 'Byculla'],
+    [['फोर्ट'], 'Fort'],
+    [['धारावी'], 'Dharavi'],
+    [['गोवंडी'], 'Govandi'],
+    [['मानखुर्द'], 'Mankhurd'],
+    [['ट्रॉम्बे'], 'Trombay'],
+    [['वडाळा', 'नायगाव'], 'Naigaon'],
+    [['मलबार हिल'], 'Malabar Hill'],
+    [['ताडदेव', 'हाजी अली'], 'Tardeo'],
+    [['गिरगाव', 'चर्नी रोड'], 'Girgaon'],
+    [['ग्रँट रोड', 'ग्रांट रोड'], 'Grant Road'],
+  ];
+
+  const detectResponseLanguage = (rawQuery: string, requestedLang?: string): 'en' | 'hi' | 'mr' => {
     const q = rawQuery.toLowerCase();
-    const skillMatchers: Array<[string[], string]> = [
-      [['ac ', 'air conditioner', 'hvac', 'cooling', 'एसी'], 'AC Technician'],
-      [['electrician', 'wiring', 'mcb', 'switch', 'fan', 'light', 'विद्युत', 'इलेक्ट्रीशियन'], 'Electrician'],
-      [['plumb', 'pipe', 'tap', 'leak', 'bathroom', 'प्लंबर'], 'Plumber'],
-      [['carpent', 'wood', 'furniture', 'door', 'सुतार', 'कारपेंटर'], 'Carpenter'],
-      [['car', 'bike', 'ev ', 'garage', 'mechanic', 'scanner', 'auto', 'vehicle', 'गाडी', 'मॅकॅनिक'], 'Automotive Services'],
-      [['network', 'wifi', 'router', 'fiber', 'lan', 'cabling'], 'Network Technician'],
-      [['software', 'it engineering', 'server', 'cloud', 'laptop', 'computer', 'संगणक'], 'IT Engineering'],
-      [['ro ', 'purifier', 'water filter'], 'RO Technician'],
-      [['cctv', 'camera'], 'CCTV Technician'],
-      [['paint', 'wall', 'putty'], 'Painter'],
-      [['clean', 'deep clean', 'sanitiz'], 'Cleaning Services'],
+    const hasDevanagari = /[\u0900-\u097F]/.test(rawQuery);
+    const marathiHints = [
+      'आहे', 'पाहिजे', 'हवा', 'हवी', 'दाखवा', 'करा', 'साठी', 'जवळ', 'मध्ये', 'कुठे', 'किती', 'सांगा',
+      'मदत', 'नोंदणी', 'दुचाकी', 'चारचाकी', 'तंत्रज्ञ', 'सुतार', 'कामगार', 'हवे', 'कसे',
     ];
+    const hindiHints = [
+      'है', 'चाहिए', 'दिखाओ', 'दिखाइए', 'बताओ', 'बताइए', 'करना', 'करनी', 'कहाँ', 'कहां', 'में', 'के पास',
+      'कितना', 'कितने', 'मदद', 'खोजें', 'खोजो', 'खोलो', 'खोलें', 'मेरा', 'मेरी', 'मुझे', 'मिलेगा', 'मिलेंगे',
+      'chahiye', 'dikhao', 'batao', 'kaha', 'kahan', 'kaise', 'kitna', 'madad', 'kholo', 'mujhe', 'karna', 'karni', 'dukan', 'bijli',
+    ];
+
+    if (marathiHints.some((w) => q.includes(w))) return 'mr';
+    if (hindiHints.some((w) => q.includes(w))) return 'hi';
+    if (requestedLang === 'hi' || requestedLang === 'mr' || requestedLang === 'en') {
+      return requestedLang;
+    }
+    if (hasDevanagari) return 'hi';
+    return 'en';
+  };
+
+  const normalizeCanonicalSkill = (rawSkill: string): string => {
+    const clean = rawSkill.trim().toLowerCase();
+    if (!clean) return '';
+    const exact = SKILL_CATEGORIES.find((s) => s.toLowerCase() === clean);
+    return exact || '';
+  };
+
+  const normalizeCanonicalZone = (rawZone: string): string => {
+    const clean = rawZone.trim().toLowerCase();
+    if (!clean) return '';
+    const exact = MUMBAI_INITIAL_CLUSTERS.find((z) => z.name.toLowerCase() === clean);
+    return exact ? exact.name : '';
+  };
+
+  const parseLocalVoiceIntent = (rawQuery: string, requestedLanguage?: string, defaultZone?: string) => {
+    const q = rawQuery.toLowerCase().trim();
+    const resolvedLanguage = detectResponseLanguage(rawQuery, requestedLanguage);
+
+    // Order specific skills before general ones
+    const skillMatchers: Array<[string[], string]> = [
+      [['evm four', 'evm car', 'ev four', 'electric car', 'ईवीएम फोर', 'इलेक्ट्रिक कार', 'चार चाकी ईवी'], 'EVM four-wheeler mechanic'],
+      [['evm mechanic', 'evm ', 'ev mechanic', 'ev bike', 'electric bike', 'e-scooter', 'electric scooter', 'ईवीएम', 'ईवी मैकेनिक', 'इलेक्ट्रिक वाहन'], 'EVM mechanic'],
+      [['four-wheeler', 'four wheeler', 'car mechanic', 'car repair', 'फोर व्हीलर', 'कार मैकेनिक', 'फोर-व्हीलर', 'गाड़ी मैकेनिक'], 'Four-wheeler mechanic'],
+      [['bike mechanic', 'two wheeler', 'two-wheeler', 'scooter', 'motorcycle', 'बाइक', 'बाइक मैकेनिक', 'दुचाकी', 'स्कूटर', 'मोटरसाइकिल'], 'Bike mechanic'],
+      [['beautician', 'beauty', 'parlour', 'parlor', 'salon', 'makeup', 'bridal', 'ब्यूटीशियन', 'ब्यूटी', 'पार्लर', 'सैलून', 'मेकअप'], 'Beauticians'],
+      [['ac ', 'air conditioner', 'hvac', 'cooling', 'एसी', 'एअर कंडिशनर'], 'AC Technician'],
+      [['electrician', 'wiring', 'mcb', 'switch', 'fan', 'light', 'bijli', 'बिजली', 'इलेक्ट्रीशियन', 'इलेक्ट्रिशियन', 'विद्युत', 'वायरिंग'], 'Electrician'],
+      [['plumb', 'pipe', 'tap', 'leak', 'bathroom', 'nal', 'प्लंबर', 'नल', 'पाइप', 'लीकेज'], 'Plumber'],
+      [['carpent', 'wood', 'furniture', 'door', 'wardrobe', 'सुतार', 'कारपेंटर', 'बढ़ई', 'फर्नीचर', 'लकड़ी'], 'Carpenter'],
+      [['ro ', 'purifier', 'water filter', 'आरओ', 'वाटर प्यूरीफायर'], 'RO Technician'],
+      [['cctv', 'camera', 'सीसीटीवी', 'कैमरा'], 'CCTV Technician'],
+      [['paint', 'wall', 'putty', 'पेंटर', 'पेंट', 'पुताई', 'रंगारी'], 'Painter'],
+      [['weld', 'fabrication', 'वेल्डर', 'वेल्डिंग'], 'Welder'],
+      [['mason', 'brick', 'tile', 'plaster', 'राजमिस्त्री', 'मेसन', 'गवंडी'], 'Mason'],
+      [['civil', 'construction', 'सिविल'], 'Civil Worker'],
+      [['appliance', 'fridge', 'washing machine', 'microwave', 'geyser', 'फ्रिज', 'वाशिंग मशीन', 'माइक्रोवेव'], 'Appliance Repair'],
+      [['clean', 'deep clean', 'sanitiz', 'सफाई', 'सफ़ाई', 'स्वच्छता', 'क्लीनिंग'], 'Cleaning Services'],
+      [['computer repair', 'laptop repair', 'pc repair', 'कंप्यूटर रिपेयर', 'लैपटॉप', 'संगणक'], 'Computer Repairing'],
+      [['software', 'windows', 'driver', 'antivirus', 'सॉफ्टवेयर', 'सॉफ़्टवेयर'], 'Software'],
+      [['hardware shop', 'hardware store', 'motherboard', 'ram', 'ssd', 'smps'], 'Hardware'],
+      [['network technician', 'structured cabling', 'fiber', 'isp', 'नेटवर्क टेक्नीशियन', 'नेटवर्क तंत्रज्ञ'], 'Network Technician'],
+      [['network', 'wifi', 'router', 'lan', 'नेटवर्किंग', 'वाईफाई'], 'Networking'],
+      [['it engineering', 'server', 'cloud', 'sysadmin', 'आईटी', 'आयटी'], 'IT Engineering'],
+      [['automotive', 'garage', 'obd', 'vehicle', 'ऑटोमोबाइल', 'गैरेज', 'गाडी'], 'Automotive Services'],
+    ];
+
     let suggestedSkill = '';
     for (const [keywords, skill] of skillMatchers) {
       if (keywords.some((kw) => q.includes(kw))) {
@@ -303,30 +399,131 @@ Return JSON with an array "recommendations" containing objects { "id": string, "
     }
 
     const mumbaiZones = MUMBAI_INITIAL_CLUSTERS.map((z) => z.name);
-    const matchedZone = mumbaiZones.find((z) => q.includes(z.toLowerCase())) || defaultZone || '';
+    let matchedZone = mumbaiZones.find((z) => q.includes(z.toLowerCase())) || '';
+    if (!matchedZone) {
+      for (const [aliases, canonicalZone] of ZONE_ALIAS_MAP) {
+        if (aliases.some((alias) => q.includes(alias.toLowerCase()))) {
+          matchedZone = canonicalZone;
+          break;
+        }
+      }
+    }
+    const zoneForFilter = matchedZone || '';
 
-    const isCart = q.includes('cart') || q.includes('checkout');
-    const isProduct = q.includes('product') || q.includes('buy') || q.includes('shop') || q.includes('part') || q.includes('discount');
-    const isContractor = q.includes('contractor') || q.includes('builder') || q.includes('project');
-    const suggestedFeed = isProduct ? 'products' : isContractor ? 'contractors' : 'technicians';
-    const action = isCart ? 'open_cart' : q.includes('booking') || q.includes('status') ? 'open_booking' : 'search';
+    const isCart =
+      q.includes('cart') || q.includes('checkout') || q.includes('कार्ट') || q.includes('बास्केट');
+    const isProduct =
+      q.includes('product') ||
+      q.includes('buy') ||
+      q.includes('shop') ||
+      q.includes('part') ||
+      q.includes('discount') ||
+      q.includes('wire') ||
+      q.includes('tool') ||
+      q.includes('दुकान') ||
+      q.includes('सामान') ||
+      q.includes('खरीद') ||
+      q.includes('हार्डवेयर') ||
+      q.includes('उत्पाद') ||
+      q.includes('छूट') ||
+      q.includes('वस्तू');
+    const isContractor =
+      q.includes('contractor') ||
+      q.includes('builder') ||
+      q.includes('project') ||
+      q.includes('ठेकेदार') ||
+      q.includes('कंत्राटदार') ||
+      q.includes('प्रोजेक्ट');
+    const isBookingHelp =
+      q.includes('booking') ||
+      q.includes('book ') ||
+      q.includes('status') ||
+      q.includes('appointment') ||
+      q.includes('slot') ||
+      q.includes('बुकिंग') ||
+      q.includes('बुक ') ||
+      q.includes('बुक कर') ||
+      q.includes('स्लॉट') ||
+      q.includes('स्थिति') ||
+      q.includes('ऑर्डर');
 
-    const replyText =
-      language === 'mr'
-        ? `${matchedZone || 'मुंबई'} साठी ${suggestedSkill || 'तज्ञ सेवा'} फिल्टर केले आहे. कृपया उपलब्ध स्लॉट निवडा किंवा कार्ट तपासा.`
-        : `Showing ${suggestedSkill || 'available verified specialists'}${matchedZone ? ` in ${matchedZone}` : ' across Mumbai'}. You can tap the quick button below to apply filters or review live estimates.`;
+    const suggestedFeed = isProduct
+      ? 'products'
+      : isContractor
+        ? 'contractors'
+        : suggestedSkill
+          ? 'technicians'
+          : '';
 
-    return { replyText, suggestedSkill, suggestedZone: matchedZone, suggestedFeed, action };
+    const hasServiceIntent = Boolean(suggestedSkill || matchedZone || isProduct || isContractor || isCart || isBookingHelp);
+    const action = isCart
+      ? 'open_cart'
+      : isBookingHelp && !suggestedSkill && !isProduct && !isContractor
+        ? 'open_booking'
+        : hasServiceIntent
+          ? 'search'
+          : 'none';
+
+    const displayZone = matchedZone || defaultZone || '';
+
+    let replyText = '';
+    if (action === 'none') {
+      replyText =
+        resolvedLanguage === 'hi'
+          ? 'मैं आपका सेवा अनुरोध ठीक से समझ नहीं पाया। कृपया सेवा का नाम (जैसे इलेक्ट्रिशियन, बाइक मैकेनिक, ब्यूटीशियन) और मुंबई इलाका (जैसे अंधेरी, दादर) बताएं।'
+          : resolvedLanguage === 'mr'
+            ? 'तुमची विनंती स्पष्ट समजली नाही. कृपया सेवा श्रेणी (उदा. इलेक्ट्रिशियन, बाइक मॅकॅनिक, ब्यूटीशियन) आणि मुंबईचा भाग (उदा. अंधेरी, दादर) सांगा.'
+            : 'I could not identify a specific service or Mumbai area from that request. Please mention a trade (e.g. Electrician, Bike mechanic, Beauticians) or Mumbai locality.';
+    } else if (action === 'open_cart') {
+      replyText =
+        resolvedLanguage === 'hi'
+          ? 'आपका शॉपिंग कार्ट तैयार है। ऑर्डर पूरा करने के लिए नीचे "शॉपिंग कार्ट खोलें" बटन दबाएं।'
+          : resolvedLanguage === 'mr'
+            ? 'तुमचा शॉपिंग कार्ट तयार आहे. ऑर्डर पूर्ण करण्यासाठी खालील "शॉपिंग कार्ट उघडा" बटणावर क्लिक करा.'
+            : 'Your shopping cart is ready. Tap the button below to review items and complete checkout.';
+    } else if (action === 'open_booking') {
+      replyText =
+        resolvedLanguage === 'hi'
+          ? 'सेवा बुकिंग, उपलब्ध स्लॉट चुनने और अपनी बुकिंग स्थिति देखने के लिए नीचे "बुकिंग केंद्र खोलें" बटन दबाएं।'
+          : resolvedLanguage === 'mr'
+            ? 'सेवा बुक करण्यासाठी, वेळ स्लॉट निवडण्यासाठी आणि बुकिंग स्थिती पाहण्यासाठी खालील "बुकिंग केंद्र उघडा" बटण दाबा.'
+            : 'Tap Open Booking Hub below to schedule a free technician time slot or track your active bookings.';
+    } else if (isProduct) {
+      replyText =
+        resolvedLanguage === 'hi'
+          ? `${displayZone || 'मुंबई'} में दुकान के उत्पाद और छूट देखने के लिए नीचे दिए गए बटन पर टैप करें।`
+          : resolvedLanguage === 'mr'
+            ? `${displayZone || 'मुंबई'} मधील दुकानातील वस्तू आणि सवलती पाहण्यासाठी खालील बटणावर क्लिक करा.`
+            : `Showing local Mumbai shop products and member discounts${displayZone ? ` in ${displayZone}` : ''}. Tap below to view listings.`;
+    } else {
+      replyText =
+        resolvedLanguage === 'hi'
+          ? `${displayZone || 'मुंबई'} में ${suggestedSkill || 'सत्यापित विशेषज्ञ'} के परिणाम तैयार हैं। फ़िल्टर लागू करने के लिए नीचे बटन दबाएं${isBookingHelp ? ' या तुरंत बुकिंग शुरू करें।' : '।'}`
+          : resolvedLanguage === 'mr'
+            ? `${displayZone || 'मुंबई'} साठी ${suggestedSkill || 'तज्ञ सेवा'} परिणाम तयार आहेत. फिल्टर लागू करण्यासाठी खालील बटण दाबा.`
+            : `Showing ${suggestedSkill || 'available verified specialists'}${displayZone ? ` in ${displayZone}` : ' across Mumbai'}. Tap the button below to apply filters.`;
+    }
+
+    return {
+      replyText,
+      suggestedSkill,
+      suggestedZone: zoneForFilter,
+      suggestedFeed: suggestedFeed || (action === 'search' ? 'technicians' : ''),
+      action,
+      resolvedLanguage,
+      source: 'local' as const,
+    };
   };
 
   app.post('/api/ai/voice-assistant', async (req, res) => {
     const { query: userQuery, language, userRole, clusterZone, liveSummary } = req.body ?? {};
-    if (!userQuery || typeof userQuery !== 'string') {
-      res.status(400).json({ error: 'query text is required.' });
+    if (!userQuery || typeof userQuery !== 'string' || !userQuery.trim()) {
+      res.status(400).json({ error: 'Please speak or type a service question first.' });
       return;
     }
 
     const fallbackResponse = parseLocalVoiceIntent(userQuery, language, clusterZone);
+    const targetLanguage = fallbackResponse.resolvedLanguage;
 
     try {
       const ai = getGeminiClient();
@@ -335,74 +532,85 @@ Return JSON with an array "recommendations" containing objects { "id": string, "
         return;
       }
 
-      const systemInstruction = `You are the AI Voice Assistant for All in One Skill in Mumbai, Maharashtra.
-Help users search for skilled technicians (Electrician, Plumber, Carpenter, AC Technician, Network Technician, IT Engineering, Automotive Services, Computer Repairing, etc.), shopkeeper hardware products with member discounts, contractor workforce projects, availability, and booking steps.
-Cover Mumbai City (Colaba, Fort, Byculla, Dadar, Worli, Sion, Mahim) and Mumbai Suburbs (Bandra, Khar, Santacruz, Andheri, Jogeshwari, Goregaon, Malad, Kandivali, Borivali, Kurla, Ghatkopar, Powai, Mulund, Chembur).
-Respond cleanly in ${language === 'mr' ? 'Marathi (concise spoken sentences)' : 'English (concise spoken sentences, max 3 sentences)'}.
-Return valid JSON matching the schema.`;
+      const languageRule =
+        targetLanguage === 'hi'
+          ? 'Hindi (Devanagari script — हिन्दी, natural concise spoken sentences under 280 characters)'
+          : targetLanguage === 'mr'
+            ? 'Marathi (Devanagari script — मराठी, concise spoken sentences under 280 characters)'
+            : 'English (concise spoken sentences under 280 characters)';
 
-      const modelsToTry = ['gemini-3.1-flash-lite', 'gemini-4-hydrogen'];
-      let parsed: Record<string, unknown> | null = null;
+      const systemInstruction = `You are the AI Voice Service Assistant for "All in One Skill" in Mumbai, Maharashtra.
+Help users search for skilled technicians, hardware shopkeeper products & discounts, contractor projects, availability, and service bookings across all 58 Mumbai City & Suburban zones (Colaba, Fort, Byculla, Dadar, Worli, Sion, Mahim, Bandra, Khar, Santacruz, Andheri, Jogeshwari, Goregaon, Malad, Kandivali, Borivali, Kurla, Ghatkopar, Powai, Mulund, Chembur, etc.).
 
-      for (const modelName of modelsToTry) {
-        try {
-          const response = await withAiTimeout(
-            ai.models.generateContent({
-              model: modelName,
-              contents: JSON.stringify({
-                userRole: userRole || 'customer',
-                currentZone: clusterZone || 'Andheri',
-                liveSummary: liveSummary || {},
-                spokenOrTypedQuery: userQuery.slice(0, 600),
-              }),
-              config: {
-                ...(modelName === 'gemini-4-hydrogen'
-                  ? { thinkingConfig: { thinkingLevel: ThinkingLevel.LOW } }
-                  : {}),
-                systemInstruction,
-                responseMimeType: 'application/json',
-                responseSchema: {
-                  type: Type.OBJECT,
-                  properties: {
-                    replyText: { type: Type.STRING, description: 'Natural, spoken-friendly response under 320 characters.' },
-                    suggestedSkill: { type: Type.STRING, description: 'Exact skill category name if applicable, else empty string.' },
-                    suggestedZone: { type: Type.STRING, description: 'Mumbai zone/suburb name if mentioned, else empty string.' },
-                    suggestedFeed: {
-                      type: Type.STRING,
-                      description: 'One of technicians, products, shops, contractors, projects, or empty string.',
-                    },
-                    action: {
-                      type: Type.STRING,
-                      description: 'One of search, open_booking, open_cart, none.',
-                    },
-                  },
-                  required: ['replyText', 'suggestedSkill', 'suggestedZone', 'suggestedFeed', 'action'],
+Exact canonical skill category names (use exact spelling in suggestedSkill when applicable):
+${SKILL_CATEGORIES.join(', ')}
+
+Rules:
+1. Respond cleanly in ${languageRule}.
+2. Even if the user types Hinglish (Roman Hindi like "Andheri me bike mechanic chahiye") or Devanagari Hindi ("अंधेरी में इलेक्ट्रिशियन चाहिए"), understand it accurately and reply in ${languageRule}.
+3. For booking status/scheduling help without a search filter, set action="open_booking". For cart/checkout, set action="open_cart". For finding technicians/shops/products/contractors, set action="search". If the input is completely unrelated/unintelligible noise, set action="none" and politely ask the user to name a Mumbai service or area.
+4. Always return valid JSON matching the schema.`;
+
+      const response = await withAiTimeout(
+        ai.models.generateContent({
+          model: 'gemini-3.1-flash-lite',
+          contents: JSON.stringify({
+            requestedLanguage: targetLanguage,
+            userRole: userRole || 'customer',
+            currentZone: clusterZone || 'Andheri',
+            liveSummary: liveSummary || {},
+            spokenOrTypedQuery: userQuery.trim().slice(0, 600),
+          }),
+          config: {
+            systemInstruction,
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                replyText: { type: Type.STRING, description: 'Natural spoken-friendly answer in the requested language (max 300 chars).' },
+                suggestedSkill: { type: Type.STRING, description: 'Exact canonical skill category name if applicable, else empty string.' },
+                suggestedZone: { type: Type.STRING, description: 'Canonical Mumbai zone name in English (e.g. Andheri, Dadar) if mentioned, else empty string.' },
+                suggestedFeed: {
+                  type: Type.STRING,
+                  description: 'One of technicians, products, shops, contractors, projects, or empty string.',
+                },
+                action: {
+                  type: Type.STRING,
+                  description: 'One of search, open_booking, open_cart, none.',
                 },
               },
-            }),
-            12000
-          );
-          parsed = JSON.parse((response.text ?? '{}').trim()) as Record<string, unknown>;
-          break;
-        } catch (modelErr) {
-          console.warn(`AI voice assistant model ${modelName} unavailable, trying next:`, modelErr);
-        }
-      }
+              required: ['replyText', 'suggestedSkill', 'suggestedZone', 'suggestedFeed', 'action'],
+            },
+          },
+        }),
+        14000
+      );
 
-      if (parsed) {
-        res.json({
-          replyText: String(parsed.replyText || fallbackResponse.replyText),
-          suggestedSkill: String(parsed.suggestedSkill || fallbackResponse.suggestedSkill),
-          suggestedZone: String(parsed.suggestedZone || fallbackResponse.suggestedZone),
-          suggestedFeed: String(parsed.suggestedFeed || fallbackResponse.suggestedFeed),
-          action: String(parsed.action || fallbackResponse.action),
-        });
-        return;
-      }
+      const parsed = JSON.parse((response.text ?? '{}').trim()) as Record<string, unknown>;
+      const aiSkill = normalizeCanonicalSkill(String(parsed.suggestedSkill || ''));
+      const aiZone = normalizeCanonicalZone(String(parsed.suggestedZone || ''));
+      const rawFeed = String(parsed.suggestedFeed || '');
+      const allowedFeeds = new Set(['technicians', 'products', 'shops', 'contractors', 'projects']);
+      const normalizedFeed = allowedFeeds.has(rawFeed) ? rawFeed : fallbackResponse.suggestedFeed;
+      const rawAction = String(parsed.action || '');
+      const allowedActions = new Set(['search', 'open_booking', 'open_cart', 'none']);
+      const normalizedAction = allowedActions.has(rawAction) ? rawAction : fallbackResponse.action;
 
-      res.json(fallbackResponse);
+      const replyCandidate = String(parsed.replyText || '').trim();
+      res.json({
+        replyText: replyCandidate || fallbackResponse.replyText,
+        suggestedSkill: aiSkill || fallbackResponse.suggestedSkill,
+        suggestedZone: aiZone || fallbackResponse.suggestedZone,
+        suggestedFeed: normalizedFeed,
+        action:
+          normalizedAction === 'none' && (aiSkill || aiZone || fallbackResponse.suggestedSkill || fallbackResponse.suggestedZone)
+            ? 'search'
+            : normalizedAction,
+        resolvedLanguage: targetLanguage,
+        source: 'gemini',
+      });
     } catch (error) {
-      console.error('AI voice assistant error:', error);
+      console.warn('AI voice assistant Gemini fallback triggered:', error);
       res.json(fallbackResponse);
     }
   });

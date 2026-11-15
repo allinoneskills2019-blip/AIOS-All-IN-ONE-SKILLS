@@ -101,19 +101,40 @@ export function useDeviceLocation(availableZoneNames: string[] = []): DeviceLoca
     setIsPermissionDenied(false);
     setManualZoneName(null);
 
+    let settled = false;
+    const safetyTimer = window.setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        setStatus('error');
+        setErrorMessage(
+          'Browser location request did not respond (possibly blocked by iframe permissions). Select your Mumbai zone below for instant 5 km matching.'
+        );
+      }
+    }, 10500);
+
     const applySuccess = (pos: GeolocationPosition) => {
-      setRawCoords({
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(safetyTimer);
+      const nextCoords = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
         accuracy: pos.coords.accuracy,
-      });
-      setUsingMumbaiAnchor(false);
+      };
+      const distFromMumbai = haversineDistanceKm(nextCoords, MUMBAI_CENTER);
+      setRawCoords(nextCoords);
+      // If user is testing or accessing from outside Mumbai (>55 km), auto-anchor to nearest Mumbai cluster
+      // so 5 km nearby jobs & nearest sorting work out of the box (user can toggle back to raw GPS anytime).
+      setUsingMumbaiAnchor(distFromMumbai > OUTSIDE_MUMBAI_THRESHOLD_KM);
       setIsPermissionDenied(false);
       setStatus('active');
       setErrorMessage(null);
     };
 
     const applyFailure = (err: GeolocationPositionError) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(safetyTimer);
       setStatus('error');
       if (err.code === err.PERMISSION_DENIED) {
         setIsPermissionDenied(true);
@@ -133,7 +154,7 @@ export function useDeviceLocation(availableZoneNames: string[] = []): DeviceLoca
       }
     };
 
-    // Pass 1: High accuracy (6s). On TIMEOUT or POSITION_UNAVAILABLE, cascade automatically to network/coarse GPS.
+    // Pass 1: High accuracy (4.5s). On TIMEOUT or POSITION_UNAVAILABLE, cascade automatically to network/coarse GPS.
     navigator.geolocation.getCurrentPosition(
       applySuccess,
       (err) => {
@@ -146,14 +167,14 @@ export function useDeviceLocation(availableZoneNames: string[] = []): DeviceLoca
           applyFailure,
           {
             enableHighAccuracy: false,
-            timeout: 12000,
+            timeout: 5500,
             maximumAge: 300000,
           }
         );
       },
       {
         enableHighAccuracy: true,
-        timeout: 6000,
+        timeout: 4500,
         maximumAge: 60000,
       }
     );

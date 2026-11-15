@@ -104,6 +104,11 @@ export const SKILL_CATEGORIES = [
   'Network Technician',
   'IT Engineering',
   'Automotive Services',
+  'Beauticians',
+  'Bike mechanic',
+  'Four-wheeler mechanic',
+  'EVM mechanic',
+  'EVM four-wheeler mechanic',
   'Other Skills',
 ] as const;
 
@@ -213,12 +218,16 @@ export function getMumbaiDistrict(zoneName: string): Exclude<MumbaiDistrict, 'Al
 }
 
 export const SKILL_SEARCH_SYNONYMS: Record<string, string[]> = {
+  Electrician: ['इलेक्ट्रिशियन', 'बिजली', 'विद्युत', 'bijli', 'wiring', 'mcb', 'switch', 'fan', 'light', 'inverter'],
+  Plumber: ['प्लंबर', 'नल', 'पाइप', 'nal', 'pipe', 'tap', 'leak', 'bathroom'],
+  Carpenter: ['कारपेंटर', 'सुतार', 'बढ़ई', 'furniture', 'wood', 'door', 'wardrobe'],
+  'AC Technician': ['एसी', 'एसी मैकेनिक', 'ac repair', 'cooling', 'split ac', 'gas refill'],
   'Computer Repairing': ['कंप्यूटर रिपेयरिंग', 'संगणक दुरुस्ती', 'computer repair', 'laptop repair', 'pc repair', 'desktop'],
   Software: ['सॉफ्टवेयर', 'सॉफ्टवेअर', 'software', 'os install', 'windows', 'driver', 'antivirus'],
   Hardware: ['हार्डवेयर', 'हार्डवेअर', 'hardware', 'motherboard', 'ram', 'ssd', 'hdd', 'smps'],
   Networking: ['नेटवर्किंग', 'networking', 'wifi', 'router', 'lan', 'switch', 'ethernet', 'cabling'],
-  'Network Technician': ['network technician', 'structured cabling', 'firewall', 'fiber', 'isp', 'switch', 'ap'],
-  'IT Engineering': ['it engineering', 'it engineer', 'server', 'cloud', 'workstation', 'enterprise it', 'sysadmin'],
+  'Network Technician': ['network technician', 'नेटवर्क टेक्नीशियन', 'structured cabling', 'firewall', 'fiber', 'isp', 'switch', 'ap'],
+  'IT Engineering': ['it engineering', 'आईटी इंजीनियरिंग', 'it engineer', 'server', 'cloud', 'workstation', 'enterprise it', 'sysadmin'],
   'Automotive Services': [
     'automotive',
     'car mechanic',
@@ -231,7 +240,14 @@ export const SKILL_SEARCH_SYNONYMS: Record<string, string[]> = {
     'ev',
     'obd scanner',
     'garage',
+    'मैकेनिक',
+    'गाड़ी',
   ],
+  Beauticians: ['beautician', 'beauty parlour', 'salon', 'makeup', 'bridal', 'ब्यूटीशियन', 'ब्यूटी पार्लर', 'सैलून', 'मेकअप'],
+  'Bike mechanic': ['bike mechanic', 'two wheeler', 'two-wheeler', 'scooter', 'motorcycle', 'बाइक मैकेनिक', 'मोटरसाइकिल', 'स्कूटर', 'दुचाकी'],
+  'Four-wheeler mechanic': ['four wheeler', 'four-wheeler', 'car mechanic', 'car repair', 'फोर व्हीलर मैकेनिक', 'कार मैकेनिक', 'चार चाकी'],
+  'EVM mechanic': ['evm', 'evm mechanic', 'ev mechanic', 'electric bike', 'ev scooter', 'e-scooter', 'ईवीएम मैकेनिक', 'इलेक्ट्रिक वाहन मैकेनिक', 'ईवी मैकेनिक'],
+  'EVM four-wheeler mechanic': ['evm four wheeler', 'evm four-wheeler', 'ev car', 'electric car mechanic', 'bms', 'ईवीएम फोर व्हीलर मैकेनिक', 'इलेक्ट्रिक कार मैकेनिक'],
 };
 
 export const PRODUCT_CATEGORIES = [

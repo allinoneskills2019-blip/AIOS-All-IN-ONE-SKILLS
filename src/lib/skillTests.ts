@@ -1033,6 +1033,316 @@ const SKILL_TEST_BANK: Record<string, SkillFieldTestPack> = {
       },
     ],
   },
+  Beauticians: {
+    skillCategory: 'Beauticians',
+    practicalChecklist: [
+      'Sanitizes brushes, tweezers, combs, and metallic tools in 70% isopropyl alcohol / UV sterilizer between clients',
+      'Performs mandatory 24–48 hour skin patch test before hair dye, bleach, or chemical peel services',
+      'Checks product expiry dates and keeps single-use disposable spatulas & neck strips',
+    ],
+    questions: [
+      {
+        id: 'bt-1',
+        question: 'Before applying permanent hair color, keratin, or chemical bleach on a new client, what safety step is mandatory?',
+        options: [
+          'Apply directly on wet scalp without testing',
+          'Perform a behind-the-ear / inner-arm skin patch test to rule out allergic reaction',
+          'Double the developer volume',
+          'Skip asking about past skin sensitivities',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'bt-2',
+        question: 'How should metallic tweezers, comedone extractors, and cuticle pushers be sanitized between clients?',
+        options: [
+          'Rinse briefly with cold tap water only',
+          'Wash with detergent, immerse in medical disinfectant / 70% alcohol, and store in a UV sanitizer cabinet',
+          'Wipe on a shared hand towel',
+          'Heat over a candle flame',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'bt-3',
+        question: 'When waxing sensitive skin areas, what should be verified immediately before applying wax?',
+        options: [
+          'Verify wax temperature on your own inner wrist and confirm there are no cuts, sunburn, or active retinoid use',
+          'Boil the wax pot to maximum heat',
+          'Apply talcum over open wounds',
+          'Pull the strip straight upward away from skin',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'bt-4',
+        question: 'To avoid cross-contamination in makeup kits, how should cream concealers and lip products be dispensed?',
+        options: [
+          'Dip fingers directly into cream jars',
+          'Scoop onto a sanitized stainless mixing palette using a clean spatula and disposable applicators',
+          'Apply lip wand directly to multiple clients',
+          'Share mascara wands across clients',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'bt-5',
+        question: 'Which facial massage direction helps prevent premature skin tugging while promoting lymphatic drainage?',
+        options: [
+          'Aggressive downward pulling on cheeks',
+          'Gentle upward and outward strokes with appropriate slip serum or massage cream',
+          'Dry friction without cleanser or cream',
+          'Scratching with fingernails',
+        ],
+        correctIndex: 1,
+      },
+    ],
+  },
+  'Bike mechanic': {
+    skillCategory: 'Bike mechanic',
+    practicalChecklist: [
+      'Checks drive chain slack (20–30 mm), sprocket teeth wear, and rear wheel alignment',
+      'Tests battery resting/charging voltage (12.6V idle / 13.8–14.4V running) and spark plug gap',
+      'Inspects front/rear brake pad thickness, cable free-play, and engine oil grade (JASO MA2)',
+    ],
+    questions: [
+      {
+        id: 'bk-1',
+        question: 'Which motorcycle engine oil specification prevents wet-clutch slippage in 4-stroke geared two-wheelers?',
+        options: ['DOT-4 Brake Fluid', 'JASO MA / MA2 rated 4T motorcycle oil', 'Car diesel 15W40 CK-4 only', '80W90 gear oil in engine sump'],
+        correctIndex: 1,
+      },
+      {
+        id: 'bk-2',
+        question: 'What happens if a motorcycle drive chain is tightened with zero free-play slack?',
+        options: [
+          'Fuel economy doubles',
+          'Suspension compression overloads the countershaft bearing, snaps the chain, or wears sprockets prematurely',
+          'Headlight becomes brighter',
+          'Brakes bleed automatically',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'bk-3',
+        question: 'For a healthy BS6 fuel-injected bike battery under engine RPM around 3000–4000, what should regulator-rectifier charging voltage read?',
+        options: ['9.5V', '13.8V – 14.5V DC', '22.0V AC', '5.0V DC'],
+        correctIndex: 1,
+      },
+      {
+        id: 'bk-4',
+        question: 'When a scooter exhibits sluggish pick-up and belt shudder on acceleration, which CVT components should be inspected?',
+        options: [
+          'Tail light bulb',
+          'Variator roller weights, clutch shoes, torque driver spring, and drive V-belt width/cracks',
+          'Rear number plate bolt',
+          'Handlebar grip rubber',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'bk-5',
+        question: 'What is indicated by white crusty deposits or severe soot fouling on a spark plug insulator tip?',
+        options: [
+          'Normal tire pressure',
+          'Lean air-fuel mixture overheating (white) or overly rich fuel/oil burning (dark wet soot)',
+          'Full fuel tank',
+          'Clean air filter',
+        ],
+        correctIndex: 1,
+      },
+    ],
+  },
+  'Four-wheeler mechanic': {
+    skillCategory: 'Four-wheeler mechanic',
+    practicalChecklist: [
+      'Uses jack stands / 2-post lift locks safely before working under a vehicle',
+      'Connects OBD-II scanner to verify DTC fault codes, fuel trims, ABS, and cooling fan relay actuation',
+      'Torques cylinder head, brake caliper, and lug bolts to OEM specification',
+    ],
+    questions: [
+      {
+        id: 'fw-1',
+        question: 'Why must you ALWAYS place rated axle jack stands under chassis pinch/frame rails before crawling under a car raised with a hydraulic jack?',
+        options: [
+          'Hydraulic seals can fail suddenly causing the vehicle to drop',
+          'To make the car lighter',
+          'To clean tire sidewalls',
+          'To charge the alternator',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'fw-2',
+        question: 'What symptom strongly points toward a stuck-closed thermostat or air pocket in the car cooling system?',
+        options: [
+          'Engine overheats rapidly while lower radiator hose stays cold',
+          'Windshield washer motor runs slowly',
+          'Horn stops working',
+          'Cabin AC blows ice cold',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'fw-3',
+        question: 'In a multi-point fuel injection petrol car, an OBD-II code P0302 specifically indicates:',
+        options: [
+          'Low washer fluid',
+          'Cylinder #2 misfire detected (ignition coil, spark plug, injector, or compression issue)',
+          'Defective rear tail lamp',
+          'Seatbelt sensor open',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'fw-4',
+        question: 'What is the proper tightening pattern for four-wheeler wheel lug nuts?',
+        options: [
+          'Tighten one side completely then adjacent nuts',
+          'Star / criss-cross pattern in stages, finished with a calibrated torque wrench on the ground',
+          'Hand tighten only',
+          'Impact gun on maximum torque without torque stick',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'fw-5',
+        question: 'When a car brake pedal pulses/vibrates under braking at highway speed, what is the primary culprit?',
+        options: [
+          'Warped / uneven thickness variation on brake rotors (discs)',
+          'Low wiper fluid',
+          'Loose fuel cap',
+          'Dead key fob battery',
+        ],
+        correctIndex: 0,
+      },
+    ],
+  },
+  'EVM mechanic': {
+    skillCategory: 'EVM mechanic',
+    practicalChecklist: [
+      'Disconnects traction battery MCB/Anderson connector before servicing motor phase or controller wiring',
+      'Tests BLDC hub motor Hall sensors (5V supply & toggling 0–5V signal pulses) and phase continuity',
+      'Inspects LFP/NMC battery BMS balance voltages, throttle Hall signal (0.8–4.2V), and regenerative braking',
+    ],
+    questions: [
+      {
+        id: 'em-1',
+        question: 'What are the typical Hall-effect throttle output signal voltages on an electric two-wheeler controller from rest to full twist?',
+        options: ['0V to 48V', 'Approx. 0.8V at idle rising smoothly to ~4.2V at full throttle', '230V AC', '12V constant'],
+        correctIndex: 1,
+      },
+      {
+        id: 'em-2',
+        question: 'If an electric scooter powers on normally (display lights up) but the rear wheel jerks or refuses to spin when twisting throttle, what should be tested first?',
+        options: [
+          'Brake cut-off switch stuck active, motor Hall sensor signals, and phase wire continuity',
+          'Paint thickness on mudguard',
+          'Headlight bulb wattage',
+          'Seat foam density',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'em-3',
+        question: 'Why does an EV BMS shut down discharge even when overall battery pack voltage looks moderately charged?',
+        options: [
+          'Tire valve cap is plastic',
+          'A single weak parallel cell group dropped below low-voltage cutoff threshold or cell temperature exceeded BMS safety limit',
+          'Horn button pressed twice',
+          'Side mirror tilted',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'em-4',
+        question: 'Before probing motor phase wires or controller MOSFET terminals on a 60V/72V EV bike, what must be done?',
+        options: [
+          'Switch off main MCB, unplug battery connector, and bleed controller DC bus capacitors cleanly',
+          'Wash the controller with soap water while plugged in',
+          'Short battery positive to frame',
+          'Rev throttle to maximum',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'em-5',
+        question: 'Which multimeter check indicates shorted MOSFETs inside a BLDC motor controller?',
+        options: [
+          'Dead-short (near 0 ohm) continuity between controller B+/B- rails and U/V/W motor phase terminals',
+          '12.6V across 12V auxiliary horn',
+          '0.8V on throttle signal wire',
+          '4.0V across balance lead',
+        ],
+        correctIndex: 0,
+      },
+    ],
+  },
+  'EVM four-wheeler mechanic': {
+    skillCategory: 'EVM four-wheeler mechanic',
+    practicalChecklist: [
+      'Applies LOTO (Lockout/Tagout), removes HV Service Disconnect, verifies 0V with CAT III 1000V meter, and wears Class 0 insulated gloves',
+      'Reads EV CAN-bus BMS cell delta, insulation resistance (megohmmeter >500 ohm/V), and DC-DC converter output',
+      'Checks thermal management coolant loop, OBC (On-Board Charger) interlocks, and regenerative braking calibration',
+    ],
+    questions: [
+      {
+        id: 'ef-1',
+        question: 'What PPE class & procedure are mandatory before opening an electric car high-voltage (300V–800V DC) junction box or inverter?',
+        options: [
+          'Standard cloth mechanics gloves immediately after key-off',
+          'Remove HV Manual Service Disconnect, wait OEM capacitor bleed time, wear Class 0 (1000V) tested insulated gloves with leather protectors, and verify Zero-Voltage with CAT III 1000V meter',
+          'Disconnect 12V negative only without waiting',
+          'Bare hands with rubber slippers',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'ef-2',
+        question: 'What is the function of the HVIL (High Voltage Interlock Loop) circuit in an electric four-wheeler?',
+        options: [
+          'Lock the cabin doors automatically',
+          'A low-voltage continuous loop through orange HV connectors that immediately opens main HV contactors if any connector is unplugged or loose',
+          'Control cabin stereo volume',
+          'Cool windshield washer fluid',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'ef-3',
+        question: 'What happens in an EV car if the DC-DC converter stops charging the auxiliary 12V battery?',
+        options: [
+          'The vehicle drives faster',
+          'The 12V battery drains, triggering dashboard warnings and preventing HV contactors from closing on next start',
+          'AC heating becomes stronger',
+          'Regen charging doubles',
+        ],
+        correctIndex: 1,
+      },
+      {
+        id: 'ef-4',
+        question: 'When testing high-voltage traction pack isolation from the vehicle chassis with an insulation tester, an isolation fault error occurs when:',
+        options: [
+          'Insulation resistance drops dangerously low due to moisture ingress or chafed orange HV cable touching chassis ground',
+          'All tires are inflated to 33 PSI',
+          'Headlights are set to auto',
+          'Battery SoC reaches 100%',
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 'ef-5',
+        question: 'Why must ONLY OEM-specified dielectric / low-conductivity EV battery coolant be used in liquid-cooled EV four-wheeler packs?',
+        options: [
+          'For brighter color',
+          'Ordinary conductive coolant or tap water inside battery cooling plates creates electrolysis corrosion and high-voltage ground leakage risk',
+          'To increase freezing temperature',
+          'It lubricates brake pads',
+        ],
+        correctIndex: 1,
+      },
+    ],
+  },
 };
 
 export function getSkillTestPack(skillCategory: string): SkillFieldTestPack {

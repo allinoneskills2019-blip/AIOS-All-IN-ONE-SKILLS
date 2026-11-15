@@ -1,4 +1,4 @@
-export type AppLanguage = 'en' | 'mr';
+export type AppLanguage = 'en' | 'hi' | 'mr';
 
 export const TRANSLATIONS = {
   en: {
@@ -694,6 +694,350 @@ export const TRANSLATIONS = {
       selectedBookingSlot: 'निवडलेली बुकिंग वेळ:',
       tapGreenSlot: 'वरील कोणताही हिरवा मोकळा स्लॉट निवडा',
     },
+  hi: {
+    common: {
+      brandName: 'All in One Skill',
+      available: 'उपलब्ध',
+      busy: 'व्यस्त',
+      unavailable: 'अनुपलब्ध',
+      kmAway: 'किमी दूर',
+      inRange: 'सेवा क्षेत्र में',
+      yrsExp: 'साल का अनुभव',
+      jobs: 'काम',
+      review: 'समीक्षा',
+      reviews: 'समीक्षाएँ',
+      close: 'बंद करें',
+      cancel: 'रद्द करें',
+      save: 'सहेजें',
+      edit: 'संपादित करें',
+      delete: 'हटाएं',
+      dismiss: 'बंद करें',
+      verified: 'सत्यापित',
+      allMumbaiZones: 'मुंबई के सभी क्षेत्र',
+      total: 'कुल',
+    },
+    header: {
+      navMarketplace: 'मार्केटप्लेस',
+      navShopkeepers: 'दुकानदार',
+      navContractors: 'ठेकेदार',
+      navTechnicians: 'टेक्नीशियन',
+      navCustomerHub: 'ग्राहक केंद्र',
+      searchPlaceholder: 'नाम, श्रेणी या मुंबई इलाका खोजें...',
+      mobileSearchPlaceholder: 'टेक्नीशियन, ठेकेदार, दुकान या इलाका खोजें...',
+      searchAriaLabel: 'नाम, श्रेणी या सेवा क्षेत्र के अनुसार टेक्नीशियन, ठेकेदार और दुकानें खोजें',
+      clearSearch: 'खोज साफ़ करें',
+      myDashboard: 'मेरा डैशबोर्ड',
+      adminConsole: 'एडमिन कंसोल',
+      signInOtp: 'साइन इन / OTP',
+      dashboardsLabel: 'डैशबोर्ड:',
+      roleCustomer: 'ग्राहक',
+      roleShopkeeper: 'दुकानदार',
+      roleContractor: 'ठेकेदार',
+      roleTechnician: 'टेक्नीशियन',
+      masterAdmin: 'मास्टर एडमिन',
+      alerts: 'सूचनाएं',
+      signOut: 'लॉग आउट',
+      mobileHome: 'होम',
+      mobileShops: 'दुकानें',
+      mobileContract: 'ठेका',
+      mobileTechs: 'टेक्नीशियन',
+      mobileOrders: 'ऑर्डर',
+      footerLeft: 'All in One Skill · मुंबई, महाराष्ट्र',
+      footerRight: 'दुकानदार · ठेकेदार · कुशल टेक्नीशियन · ग्राहक',
+      langToggleAria: 'English, हिंदी और मराठी भाषा बदलें',
+      sortByMyLocation: 'मेरी लोकेशन के अनुसार क्रम लगाएं',
+      detectingLocation: 'लोकेशन खोजी जा रही है...',
+      gpsClearPrefix: 'GPS चालू',
+      clear: 'साफ़ करें',
+      nearestFirst: 'सबसे पास पहले',
+      noQuickMatches: 'कोई मेल खाने वाला टेक्नीशियन, ठेकेदार या दुकान नहीं मिली।',
+      quickTechnicians: 'टेक्नीशियन',
+      quickContractors: 'ठेकेदार',
+      quickShops: 'दुकानें',
+    },
+    pwa: {
+      installAndroid: 'एंड्रॉइड ऐप इंस्टॉल करें',
+      installMobile: 'मोबाइल ऐप इंस्टॉल करें',
+      installTitle: 'मोबाइल पर इंस्टॉल करें',
+      offlineBanner: 'ऑफ़लाइन मोड — सहेजा गया डेटा दिख रहा है',
+    },
+    marketplace: {
+      heroEyebrow: 'मुंबई महानगर सेवा · ५८ शहर और उपनगर क्लस्टर',
+      heroTitle: 'मुंबई के सत्यापित टेक्नीशियन, ठेकेदार और हार्डवेयर दुकानें एक ही मंच पर।',
+      heroSubtitle:
+        'All in One Skill कोलाबा, बांद्रा, अंधेरी और बोरीवली सहित पूरी मुंबई में स्थानीय हार्डवेयर दुकानदारों, निर्माण ठेकेदारों और कुशल कारीगरों को सीधे जोड़ता है।',
+      heroSearchPlaceholder: 'इलेक्ट्रिशियन, एसी रिपेयर, बाइक मैकेनिक, ब्यूटीशियन या कॉपर वायर खोजें...',
+      useMyLocation: 'मेरी लोकेशन उपयोग करें',
+      locating: 'खोज रहे हैं...',
+      nearPrefix: 'पास:',
+      radiusLabel: 'दूरी:',
+      distanceAll: 'सभी दूरी',
+      distanceWithinPrefix: 'भीतर:',
+      sortedNearest: 'क्रम: सबसे पास पहले',
+      sortNearest: 'नज़दीक पहले लगाएं',
+      useRawGps: 'मूल GPS उपयोग करें',
+      measureFromPrefix: 'केंद्र से मापें:',
+      gpsHint: 'किमी दूरी देखने के लिए GPS चालू करें या मुंबई क्षेत्र चुनें',
+      showingWithinPrefix: 'परिणाम सीमा:',
+      showingOfPrefix: 'केंद्र:',
+      liveCoverageLabel: 'लाइव मुंबई कवरेज',
+      kpiTechnicians: 'पंजीकृत टेक्नीशियन',
+      kpiProducts: 'स्थानीय दुकान उत्पाद',
+      kpiContractors: 'सत्यापित ठेकेदार',
+      kpiClusters: 'सक्रिय मुंबई ज़ोन',
+      portalsTitle: 'तीन प्रमुख मार्केटप्लेस पोर्टल',
+      portalsSubtitle: 'मुंबई के दुकानदारों, ठेकेदारों और कुशल टेक्नीशियनों के लिए समर्पित कार्यक्षेत्र।',
+      portal1Eyebrow: '०१ · विक्रेता पोर्टल',
+      portal1Title: 'दुकानदार',
+      portal1Desc:
+        'मुंबई ज़ोन में स्टॉक, मूल्य, ग्राहक ऑर्डर, पूछताछ और प्रमोटेड हार्डवेयर उत्पादों का प्रबंधन करें।',
+      portal1Cta: 'दुकानदार डैशबोर्ड खोलें',
+      portal2Eyebrow: '०२ · कार्यबल भर्ती',
+      portal2Title: 'ठेकेदार',
+      portal2Desc:
+        'साइट की ज़रूरत पोस्ट करें, क्षेत्र और अनुभव के अनुसार कारीगर चुनें और दैनिक या मासिक आधार पर काम पर रखें।',
+      portal2Cta: 'ठेकेदार डैशबोर्ड खोलें',
+      portal3Eyebrow: '०३ · कुशल पेशेवर',
+      portal3Title: 'टेक्नीशियन',
+      portal3Desc:
+        'अपना कौशल पंजीकृत करें, ३–१० किमी मुंबई सेवा क्षेत्र चुनें, उपलब्ध/व्यस्त स्थिति बदलें और ग्राहक या ठेकेदार के काम स्वीकार करें।',
+      portal3Cta: 'टेक्नीशियन डैशबोर्ड खोलें',
+      matchesLabel: 'परिणाम',
+      resetFilters: 'फ़िल्टर रीसेट करें',
+      tabTechnicians: 'टेक्नीशियन',
+      tabContractors: 'ठेकेदार',
+      tabShops: 'दुकानें',
+      tabProducts: 'दुकान के उत्पाद',
+      tabProjects: 'ठेकेदार प्रोजेक्ट्स',
+      allSkillCategories: 'सभी कौशल श्रेणियां',
+      allGrades: 'सभी ग्रेड (A / B / C)',
+      gradeAOption: 'ग्रेड A (मास्टर / ५+ वर्ष)',
+      gradeBOption: 'ग्रेड B (कुशल / २–४ वर्ष)',
+      gradeCOption: 'ग्रेड C (जूनियर / ०–१ वर्ष)',
+      allProductCategories: 'सभी उत्पाद श्रेणियां',
+      noTechsEmpty: 'इस फ़िल्टर में अभी कोई टेक्नीशियन पंजीकृत नहीं है।',
+      noTechsSub:
+        'टेक्नीशियन कुछ ही सेकंड में अपनी कौशल श्रेणी, मुंबई ज़ोन और ३/५/१० किमी सेवा क्षेत्र के साथ जुड़ सकते हैं।',
+      registerAsTech: 'टेक्नीशियन के रूप में जुड़ें',
+      nextFree: 'अगला खाली समय:',
+      bookService: 'सेवा बुक करें',
+      noContractorsEmpty: 'इस खोज या क्षेत्र में अभी कोई ठेकेदार उपलब्ध नहीं है।',
+      registerAsContractor: 'ठेकेदार के रूप में जुड़ें',
+      contactPrefix: 'संपर्क:',
+      viewProjects: 'प्रोजेक्ट देखें',
+      noShopsEmpty: 'इस खोज या क्षेत्र में अभी कोई दुकान नहीं मिली।',
+      registerShop: 'दुकान पंजीकृत करें',
+      ownerPrefix: 'मालिक:',
+      browseProducts: 'उत्पाद देखें',
+      noProductsEmpty: 'इस क्षेत्र में अभी कोई उत्पाद सूचीबद्ध नहीं है।',
+      addProductsShopkeeper: 'दुकानदार के रूप में उत्पाद जोड़ें',
+      soldByPrefix: 'विक्रेता:',
+      inStockSuffix: 'स्टॉक में उपलब्ध',
+      outOfStock: 'स्टॉक समाप्त',
+      placeOrder: 'ऑर्डर करें',
+      noProjectsEmpty: 'अभी कोई खुली ठेकेदार कार्यबल आवश्यकता नहीं है।',
+      postProjectContractor: 'ठेकेदार के रूप में प्रोजेक्ट पोस्ट करें',
+      rateLabel: 'दर:',
+      radiusUnit: 'किमी दायरा',
+      aiRecommendedTitle: 'आपके लिए AI सुझाव (AI-Recommended)',
+      aiRecommendedSub: 'आपकी वर्तमान मुंबई लोकेशन और पिछली बुकिंग के आधार पर चुने गए टेक्नीशियन।',
+      aiRefreshBtn: 'AI सुझाव ताज़ा करें',
+      aiRefreshing: 'अपडेट हो रहा है...',
+      aiHistoryBasedPrefix: 'आपकी बुकिंग के आधार पर',
+      aiLocationPrefix: 'लोकेशन',
+      aiNoLocationHint: 'बेहतर दूरी मिलान के लिए ऊपर GPS चालू करें या मुंबई क्षेत्र चुनें।',
+    },
+    auth: {
+      dialogTitle: 'All in One Skill में साइन इन करें',
+      dialogSubtitle: 'मुंबई सत्यापित मार्केटप्लेस प्रवेश',
+      accountCategory: 'खाते का प्रकार',
+      mumbaiCluster: 'मुंबई क्लस्टर',
+      mobileOtpTab: 'मोबाइल OTP (+91)',
+      googleAccountTab: 'Google खाता',
+      fullName: 'पूरा नाम',
+      mobileNumber: 'मोबाइल नंबर (+91)',
+      sendingOtp: 'SMS OTP भेजा जा रहा है...',
+      sendOtp: 'सत्यापन OTP भेजें',
+      changeNumber: 'नंबर बदलें',
+      verifying: 'सत्यापन हो रहा है...',
+      verifyOtp: 'OTP सत्यापित करें',
+      googleDesc:
+        'अपने सत्यापित Google खाते से सुरक्षित साइन इन करें। आप कभी भी डैशबोर्ड से मोबाइल नंबर जोड़ सकते हैं।',
+      connecting: 'जुड़ रहा है...',
+      continueGoogle: 'Google के साथ जारी रखें',
+    },
+    notifications: {
+      title: 'सूचनाएं और अलर्ट',
+      smsOtp: 'SMS OTP',
+      whatsapp: 'व्हाट्सऐप',
+      verified: 'सत्यापित',
+      pending: 'लंबित',
+      authorized: 'सक्रिय',
+      disabled: 'बंद',
+      whatsappAlert: 'व्हाट्सऐप अलर्ट',
+      empty: 'अभी कोई सूचना नहीं है। बुकिंग पुष्टि, काम की स्वीकृति और भुगतान अलर्ट यहाँ दिखेंगे।',
+      markRead: 'पढ़ा हुआ चिह्नित करें',
+    },
+    technician: {
+      authTitle: 'टेक्नीशियन प्रोफ़ाइल और जॉब डेस्क',
+      authDesc:
+        'अपना कौशल दर्ज करें, मुंबई सेवा क्लस्टर (३/५/१० किमी) चुनें, उपलब्धता प्रबंधित करें और ग्राहक या ठेकेदार के काम स्वीकार करें।',
+      authCta: 'टेक्नीशियन के रूप में जुड़ें / साइन इन करें',
+      workbenchTitle: 'टेक्नीशियन कार्यक्षेत्र',
+      completeReg: 'नीचे अपना टेक्नीशियन पंजीकरण पूरा करें',
+      urgentHeading: 'आसपास के तुरंत काम (५ किमी भीतर)',
+      urgentActiveSuffix: '५ किमी के भीतर सक्रिय',
+      urgentSub:
+        'आपके डिवाइस की Geolocation API लोकेशन से ५ किमी के दायरे में हाई-प्रायोरिटी अनुरोध और नज़दीकी दैनिक काम दिखाए जाते हैं।',
+      scanningGps: 'GPS स्कैन हो रहा है...',
+      refreshGpsScan: 'GPS दोबारा स्कैन करें',
+      enableLiveGps: 'लाइव GPS चालू करें (५ किमी)',
+      readyScanTitle: '५ किमी सेवा क्षेत्र स्कैन करने के लिए तैयार',
+      readyScanDesc:
+        'अपनी लाइव लोकेशन से ५ किमी भीतर की अर्जेंट बुकिंग और ठेकेदार के काम देखने के लिए GPS अनुमति दें या मुंबई ज़ोन चुनें।',
+      scan5kmBtn: '५ किमी दायरा स्कैन करें',
+      noUrgentNearby: 'अभी ५ किमी भीतर कोई तुरंत या अर्जेंट सेवा अनुरोध नहीं है।',
+      noUrgentSub:
+        'अपनी स्थिति "उपलब्ध" रखें। ५ किमी दायरे में आज या कल की अर्जेंट बुकिंग यहाँ अपने आप दिखेंगी।',
+      immediateCustomerReqs: 'तुरंत ग्राहक सेवा अनुरोध',
+      nearbySiteDispatch: 'नज़दीकी साइट पर तुरंत काम',
+      urgentPriority: 'अति-आवश्यक प्राथमिकता',
+      immediateService: 'तुरंत सेवा',
+      servicePayout: 'सेवा भुगतान',
+      acceptUrgentJob: 'तुरंत काम स्वीकार करें',
+      decline: 'अस्वीकार करें',
+      startWorkNow: 'अभी काम शुरू करें',
+      signalAvailability: 'तुरंत उपलब्धता भेजें',
+      availabilitySent: 'उपलब्धता भेजी गई',
+      sending: 'भेजा जा रहा है...',
+      customerServiceReqs: 'ग्राहक सेवा अनुरोध',
+      acceptJob: 'काम स्वीकार करें',
+      startWork: 'काम शुरू करें',
+      markCompleted: 'पूर्ण चिह्नित करें',
+      contractorOffers: 'ठेकेदार के काम के प्रस्ताव',
+      acceptOffer: 'प्रस्ताव स्वीकार करें',
+      ratingsReviewsTitle: 'ग्राहक रेटिंग और समीक्षाएं',
+      ratingsReviewsSub: 'सेवा पूरी होने के बाद मुंबई के ग्राहकों द्वारा दी गई सत्यापित प्रतिक्रिया।',
+      profileSectionTitle: 'टेक्नीशियन प्रोफ़ाइल और मुंबई कवरेज',
+      saveProfileBtn: 'टेक्नीशियन प्रोफ़ाइल सहेजें',
+      membershipTitle: 'टेक्नीशियन सदस्यता',
+      credentialsTitle: 'प्रमाणपत्र, लाइसेंस और डिग्री दस्तावेज़',
+      credentialsSub:
+        'स्कैन कॉपी या PDF (५ MB तक) अपलोड करें। फाइलें सुरक्षित रूप से Firebase Storage में सहेजी जाती हैं।',
+      linkedDocsTitle: 'प्रोफ़ाइल से जुड़े दस्तावेज़',
+      serviceUpiLabel: 'ग्राहक भुगतान UPI ID (वैकल्पिक · सेवा QR में दिखता है)',
+    },
+    customer: {
+      authTitle: 'ग्राहक सेवा और ऑर्डर पोर्टल',
+      authDesc:
+        'सत्यापित मुंबई टेक्नीशियन बुक करने, दुकानदार उत्पाद ऑर्डर करने, डिलीवरी ट्रैक करने और सहायता लेने के लिए साइन इन करें।',
+      authCta: 'ग्राहक के रूप में साइन इन करें',
+      hubTitle: 'ग्राहक सेवा और ऑर्डर केंद्र',
+      hubSub:
+        'मुंबई के सत्यापित टेक्नीशियनों की तुलना करें, स्लॉट बुक करें, ऑर्डर ट्रैक करें और AI सहायता से बात करें।',
+      findTechsTitle: 'मुंबई क्लस्टर के अनुसार उपलब्ध टेक्नीशियन खोजें',
+      findTechsSub:
+        'AI बुकिंग मैनेजर व्यस्त टेक्नीशियनों को हटाकर नज़दीकी और उच्च रेटिंग वाले कारीगर दिखाता है।',
+      matching: 'खोज रहे हैं...',
+      matchTechsBtn: 'उपलब्ध टेक्नीशियन खोजें',
+      viewSlotsBook: 'समय देखें और बुक करें',
+      yourBookings: 'आपकी सेवा बुकिंग',
+      yourOrders: 'आपके उत्पाद ऑर्डर',
+      serviceHistoryTitle: 'सेवा इतिहास',
+      serviceHistorySub: 'पिछली सभी पूर्ण सेवाओं की तारीख, टेक्नीशियन, रसीद और एक-क्लिक पुनः बुकिंग।',
+      viewReceipt: 'मूल रसीद देखें',
+      rebook: 'फिर बुक करें',
+      generateQrCode: 'सेवा QR कोड बनाएं',
+      qrModalTitle: 'सेवा भुगतान QR कोड',
+      qrModalSub: 'किसी भी UPI ऐप (GPay, PhonePe, Paytm, BHIM) से स्कैन करें या सीधे भुगतान लिंक खोलें।',
+      qrScanHint: 'भुगतान के लिए QR स्कैन करें या UPI ऐप खोलें',
+      qrOpenUpiApp: 'UPI ऐप खोलें',
+      qrCopyLink: 'UPI लिंक कॉपी करें',
+      qrCopied: 'लिंक कॉपी हो गया',
+      qrDownloadPng: 'QR PNG डाउनलोड करें',
+      qrUpiIdLabel: 'भुगतान प्राप्तकर्ता UPI ID',
+      qrEditUpi: 'UPI ID बदलें',
+      qrApplyUpi: 'QR अपडेट करें',
+      qrFullTotal: 'कुल राशि',
+      qrServiceChargeOnly: 'केवल टेक्नीशियन शुल्क',
+      qrSubmitUtr: 'पुष्टि करें और UTR दर्ज करें',
+      savedTitle: 'सहेजे गए',
+      savedSub: 'त्वरित बुकिंग और दोबारा ऑर्डर के लिए सहेजे गए मुंबई टेक्नीशियन, ठेकेदार और दुकानें।',
+      savedAll: 'सभी',
+      savedBrowseDir: 'मार्केटप्लेस सूची देखें',
+      aiSupportTitle: 'AI सहायता और कॉल सेंटर डेस्क',
+      askAiSupport: 'AI सहायता से पूछें',
+      complaintTitle: 'शिकायत या विवाद दर्ज करें',
+      submitComplaint: 'शिकायत दर्ज करें',
+    },
+    shopkeeper: {
+      authTitle: 'दुकानदार विक्रेता डैशबोर्ड',
+      authDesc:
+        'अपनी दुकान पंजीकृत करने, उत्पाद जोड़ने, ऑर्डर ट्रैक करने और ग्राहकों के सवालों के जवाब देने के लिए साइन इन करें।',
+      authCta: 'दुकानदार के रूप में जुड़ें / साइन इन करें',
+      dashboardTitle: 'दुकानदार विक्रेता डैशबोर्ड',
+      verifiedSeller: 'सत्यापित विक्रेता',
+      listedProducts: 'सूचीबद्ध उत्पाद',
+      customerOrders: 'ग्राहक ऑर्डर',
+      openEnquiries: 'खुली पूछताछ',
+      orderVolume: 'कुल ऑर्डर राशि',
+      storefrontDetails: 'दुकान का विवरण',
+      updateShop: 'दुकान प्रोफ़ाइल अपडेट करें',
+      registerShop: 'दुकान पंजीकृत करें',
+      addNewProduct: 'नया उत्पाद जोड़ें',
+      editProduct: 'उत्पादन संपादित करें',
+      publishProduct: 'उत्पाद प्रकाशित करें',
+      saveProductChanges: 'बदलाव सहेजें',
+      catalogTitle: 'आपका उत्पाद कैटलॉग और प्रचार',
+      incomingOrders: 'आने वाले ग्राहक ऑर्डर',
+      customerEnquiries: 'ग्राहक पूछताछ',
+      confirmOrder: 'ऑर्डर कन्फर्म करें',
+      markDispatched: 'डिस्पैच चिह्नित करें',
+      markDelivered: 'डिलीवर चिह्नित करें',
+      replyBtn: 'जवाब दें',
+    },
+    contractor: {
+      authTitle: 'ठेकेदार कार्यबल डैशबोर्ड',
+      authDesc:
+        'अपनी कॉन्ट्रैक्टिंग कंपनी पंजीकृत करने, साइट की आवश्यकताएं पोस्ट करने और कुशल कारीगरों को काम पर रखने के लिए साइन इन करें।',
+      authCta: 'ठेकेदार के रूप में जुड़ें / साइन इन करें',
+      dashboardTitle: 'ठेकेदार संचालन डैशबोर्ड',
+      verifiedContractor: 'सत्यापित ठेकेदार',
+      packagesTitle: 'ठेकेदार सदस्यता पैकेज',
+      profileTitle: 'ठेकेदार प्रोफ़ाइल',
+      postProjectTitle: 'निर्माण प्रोजेक्ट और कारीगर आवश्यकता पोस्ट करें',
+      publishProjectBtn: 'प्रोजेक्ट आवश्यकता प्रकाशित करें',
+      findHireTitle: 'कुशल कारीगर खोजें और नियुक्त करें',
+      findHireSub: 'कौशल, मुंबई ज़ोन और अनुभव के आधार पर सत्यापित टेक्नीशियन फ़िल्टर करें।',
+      sendHireRequest: 'काम का प्रस्ताव भेजें',
+      yourProjects: 'आपके प्रोजेक्ट्स',
+      hiredWorkers: 'नियुक्त कारीगर और निमंत्रण',
+    },
+    calendar: {
+      techTitle: 'साप्ताहिक उपलब्धता कैलेंडर',
+      custTitle: 'उपलब्ध सेवा समय चुनें',
+      techSub:
+        'ख़ाली या व्यस्त दिखाने के लिए किसी भी समय स्लॉट पर क्लिक करें। ग्राहक केवल ख़ाली स्लॉट ही बुक कर सकते हैं।',
+      custSub:
+        'नीचे से ख़ाली (हरा) स्लॉट चुनें। व्यस्त या पहले से बुक समय लॉक रहते हैं।',
+      thisWeek: 'यह सप्ताह',
+      free: 'ख़ाली',
+      busy: 'व्यस्त',
+      booked: 'बुक',
+      selected: 'चयनित',
+      selectedSlotLabel: 'चयनित स्लॉट',
+      past: 'बीता हुआ',
+      blockWeekends: 'वीकेंड बंद करें',
+      markWeekFree: 'पूरा सप्ताह ख़ाली करें',
+      timeWindow: 'समय सीमा',
+      freeDay: 'दिन ख़ाली करें',
+      busyDay: 'दिन व्यस्त करें',
+      saveWeeklySchedule: 'साप्ताहिक शेड्यूल सहेजें',
+      savingSchedule: 'सहेजा जा रहा है...',
+      scheduleSaved: 'शेड्यूल सहेजा गया',
+      selectedBookingSlot: 'चयनित बुकिंग समय:',
+      tapGreenSlot: 'ऊपर किसी भी हरे ख़ाली स्लॉट पर टैप करें',
+    },
   },
 } as const;
 
@@ -704,10 +1048,11 @@ type DeepString<T> = {
 export type TranslationDict = DeepString<(typeof TRANSLATIONS)['en']>;
 
 export function translateAvailability(status: string, language: AppLanguage): string {
-  if (language !== 'mr') return status;
-  if (status === 'Available') return TRANSLATIONS.mr.common.available;
-  if (status === 'Busy') return TRANSLATIONS.mr.common.busy;
-  if (status === 'Unavailable') return TRANSLATIONS.mr.common.unavailable;
+  if (language === 'en') return status;
+  const dict = TRANSLATIONS[language];
+  if (status === 'Available') return dict.common.available;
+  if (status === 'Busy') return dict.common.busy;
+  if (status === 'Unavailable') return dict.common.unavailable;
   return status;
 }
 
@@ -733,7 +1078,42 @@ const SKILL_MR_MAP: Record<string, string> = {
   'Network Technician': 'नेटवर्क तंत्रज्ञ',
   'IT Engineering': 'आयटी अभियांत्रिकी (IT)',
   'Automotive Services': 'ऑटोमोबाईल व ईव्ही सेवा',
+  Beauticians: 'ब्यूटीशियन (सौंदर्य सेवा)',
+  'Bike mechanic': 'बाइक मॅकॅनिक (दुचाकी)',
+  'Four-wheeler mechanic': 'फोर-व्हीलर मॅकॅनिक (कार)',
+  'EVM mechanic': 'ईव्हीएम (EVM) मॅकॅनिक',
+  'EVM four-wheeler mechanic': 'ईव्हीएम फोर-व्हीलर मॅकॅनिक',
   'Other Skills': 'इतर कौशल्ये',
+};
+
+const SKILL_HI_MAP: Record<string, string> = {
+  Electrician: 'इलेक्ट्रिशियन (बिजली मिस्त्री)',
+  Plumber: 'प्लंबर (नल कारीगर)',
+  Carpenter: 'कारपेंटर (बढ़ई)',
+  Painter: 'पेंटर (पुताई कारीगर)',
+  'AC Technician': 'एसी टेक्नीशियन',
+  Mason: 'मेसन (राजमिस्त्री)',
+  Welder: 'वेल्डर',
+  'Civil Worker': 'सिविल वर्कर',
+  'CCTV Technician': 'सीसीटीवी टेक्नीशियन',
+  'CCTV & Security': 'सीसीटीवी और सुरक्षा',
+  'RO Technician': 'आरओ (RO) टेक्नीशियन',
+  'Solar Installer': 'सोलर इंस्टॉलर',
+  'Appliance Repair': 'घरेलू उपकरण रिपेयर',
+  'Cleaning Services': 'सफ़ाई सेवाएं',
+  'Computer Repairing': 'कंप्यूटर रिपेयरिंग',
+  Software: 'सॉफ़्टवेयर (Software)',
+  Hardware: 'हार्डवेयर (Hardware)',
+  Networking: 'नेटवर्किंग (Networking)',
+  'Network Technician': 'नेटवर्क टेक्नीशियन',
+  'IT Engineering': 'आईटी इंजीनियरिंग (IT)',
+  'Automotive Services': 'ऑटोमोबाइल और ईवी सेवाएं',
+  Beauticians: 'ब्यूटीशियन (ब्यूटी सेवाएं)',
+  'Bike mechanic': 'बाइक मैकेनिक (टू-व्हीलर)',
+  'Four-wheeler mechanic': 'फोर-व्हीलर मैकेनिक (कार)',
+  'EVM mechanic': 'ईवीएम (EVM) मैकेनिक',
+  'EVM four-wheeler mechanic': 'ईवीएम फोर-व्हीलर मैकेनिक',
+  'Other Skills': 'अन्य कौशल',
 };
 
 const PRODUCT_CAT_MR_MAP: Record<string, string> = {
@@ -756,12 +1136,136 @@ const PRODUCT_CAT_MR_MAP: Record<string, string> = {
   'Safety Gear': 'सुरक्षा साहित्य',
 };
 
+const PRODUCT_CAT_HI_MAP: Record<string, string> = {
+  'Electrical & Wiring': 'इलेक्ट्रिकल और वायरिंग सामान',
+  'Plumbing & Sanitary': 'प्लंबिंग और सैनिटरी सामान',
+  'Hardware & Fasteners': 'हार्डवेयर और फास्टनर्स',
+  'Paints & Waterproofing': 'पेंट और वॉटरप्रूफिंग',
+  'Power Tools': 'पावर टूल्स',
+  'HVAC & Cooling Parts': 'एसी और कूलिंग पार्ट्स',
+  'CCTV & Security Gear': 'सीसीटीवी और सुरक्षा उपकरण',
+  'Civil & Cement Supplies': 'सीमेंट और निर्माण सामग्री',
+  'IT & Networking Gear': 'आईटी और नेटवर्किंग उपकरण',
+  'Automotive & EV Spares': 'ऑटोमोबाइल और ईवी स्पेयर पार्ट्स',
+  Electrical: 'इलेक्ट्रिकल सामान',
+  Plumbing: 'प्लंबिंग सामान',
+  Hardware: 'हार्डवेयर और टूल्स',
+  'Paints & Coatings': 'पेंट और कोटिंग्स',
+  'Cement & Civil': 'सीमेंट और निर्माण',
+  'Sanitary & Tiles': 'सैनिटरी और टाइल्स',
+  'Safety Gear': 'सुरक्षा उपकरण',
+};
+
 export function translateSkillCategory(skill: string, language: AppLanguage): string {
-  if (language !== 'mr') return skill;
-  return SKILL_MR_MAP[skill] || skill;
+  if (language === 'mr') return SKILL_MR_MAP[skill] || skill;
+  if (language === 'hi') return SKILL_HI_MAP[skill] || skill;
+  return skill;
 }
 
 export function translateProductCategory(category: string, language: AppLanguage): string {
-  if (language !== 'mr') return category;
-  return PRODUCT_CAT_MR_MAP[category] || category;
+  if (language === 'mr') return PRODUCT_CAT_MR_MAP[category] || category;
+  if (language === 'hi') return PRODUCT_CAT_HI_MAP[category] || category;
+  return category;
+}
+
+export type SeoViewKey = 'marketplace' | 'shopkeeper' | 'contractor' | 'technician' | 'customer' | 'admin';
+
+export function getSeoMetaForView(
+  view: SeoViewKey,
+  language: AppLanguage
+): { title: string; description: string } {
+  const table: Record<AppLanguage, Record<SeoViewKey, { title: string; description: string }>> = {
+    en: {
+      marketplace: {
+        title: 'All in One Skill — Verified Mumbai Technicians, Hardware Shops & Contractors',
+        description:
+          'Find verified Mumbai electricians, plumbers, beauticians, bike & four-wheeler EV mechanics, contractors, and local hardware stores across 58 clusters.',
+      },
+      shopkeeper: {
+        title: 'Shopkeeper Seller Portal · All in One Skill Mumbai',
+        description:
+          'Manage local Mumbai hardware, electrical, plumbing, and EV spare parts inventory, orders, and member discounts.',
+      },
+      contractor: {
+        title: 'Contractor Workforce Hub · All in One Skill Mumbai',
+        description:
+          'Post construction and industrial site requirements, screen Mumbai trades by zone and experience, and hire verified workers.',
+      },
+      technician: {
+        title: 'Technician Workbench & Urgent 5 km Jobs · All in One Skill',
+        description:
+          'Accept urgent 5 km nearby jobs via Geolocation, manage weekly free/busy slots, and verify trade certifications in Mumbai.',
+      },
+      customer: {
+        title: 'Customer Service & Order Hub · All in One Skill Mumbai',
+        description:
+          'Book available Mumbai technicians by cluster, track hardware deliveries, generate UPI QR payments, and reach AI support.',
+      },
+      admin: {
+        title: 'Master Admin Console · All in One Skill Mumbai',
+        description:
+          'Manage 58 Mumbai service clusters, partner approvals, revenue rules, demand heatmaps, and AI operations.',
+      },
+    },
+    hi: {
+      marketplace: {
+        title: 'All in One Skill — मुंबई के सत्यापित टेक्नीशियन, हार्डवेयर दुकानें और ठेकेदार',
+        description:
+          'मुंबई के ५८ ज़ोन में इलेक्ट्रिशियन, प्लंबर, ब्यूटीशियन, बाइक व फोर-व्हीलर ईवीएम मैकेनिक, ठेकेदार और हार्डवेयर दुकानें खोजें।',
+      },
+      shopkeeper: {
+        title: 'दुकानदार विक्रेता पोर्टल · All in One Skill मुंबई',
+        description:
+          'मुंबई में अपनी हार्डवेयर, इलेक्ट्रिकल और स्पेयर पार्ट्स दुकान का स्टॉक, ऑर्डर और सदस्य छूट प्रबंधित करें।',
+      },
+      contractor: {
+        title: 'ठेकेदार कार्यबल केंद्र · All in One Skill मुंबई',
+        description:
+          'साइट प्रोजेक्ट पोस्ट करें और मुंबई क्षेत्र व अनुभव के अनुसार सत्यापित टेक्नीशियन और कारीगरों को काम पर रखें।',
+      },
+      technician: {
+        title: 'टेक्नीशियन कार्यक्षेत्र और ५ किमी तुरंत काम · All in One Skill',
+        description:
+          'लाइव लोकेशन से ५ किमी के अंदर अर्जेंट काम स्वीकार करें, साप्ताहिक समय स्लॉट सेट करें और प्रोफ़ाइल सत्यापित करें।',
+      },
+      customer: {
+        title: 'ग्राहक सेवा और ऑर्डर केंद्र · All in One Skill मुंबई',
+        description:
+          'मुंबई ज़ोन के अनुसार उपलब्ध टेक्नीशियन बुक करें, दुकान के ऑर्डर ट्रैक करें और हिंदी/मराठी AI सहायता पाएं।',
+      },
+      admin: {
+        title: 'मास्टर एडमिन कंसोल · All in One Skill मुंबई',
+        description:
+          '५८ मुंबई सेवा क्लस्टर, पार्टनर अनुमोदन, कमीशन नियम और हीटमैप एनालिटिक्स प्रबंधित करें।',
+      },
+    },
+    mr: {
+      marketplace: {
+        title: 'All in One Skill — मुंबईतील पडताळलेले तंत्रज्ञ, दुकाने आणि कंत्राटदार',
+        description:
+          'मुंबईतील ५८ विभागांत इलेक्ट्रिशियन, प्लंबर, ब्यूटीशियन, बाइक व ईव्हीएम मॅकॅनिक, कंत्राटदार आणि हार्डवेअर दुकाने शोधा.',
+      },
+      shopkeeper: {
+        title: 'दुकानदार विक्रेता पोर्टल · All in One Skill मुंबई',
+        description: 'मुंबईत हार्डवेअर, इलेक्ट्रिकल आणि स्पेअर पार्ट्स स्टॉक, ऑर्डर्स व सवलती व्यवस्थापित करा.',
+      },
+      contractor: {
+        title: 'कंत्राटदार कार्यबल केंद्र · All in One Skill मुंबई',
+        description: 'साईट प्रकल्प पोस्ट करा आणि मुंबई विभाग व अनुभवानुसार कुशल कारागीर नेमा.',
+      },
+      technician: {
+        title: 'तंत्रज्ञ कार्यक्षेत्र आणि ५ किमी तातडीची कामे · All in One Skill',
+        description: 'GPS द्वारे ५ किमीमधील तातडीची कामे स्वीकारा, साप्ताहिक वेळापत्रक जतन करा.',
+      },
+      customer: {
+        title: 'ग्राहक सेवा आणि ऑर्डर केंद्र · All in One Skill मुंबई',
+        description: 'मुंबई विभागातील उपलब्ध तंत्रज्ञ बुक करा, ऑर्डर्स ट्रॅक करा आणि UPI QR ने पेमेंट करा.',
+      },
+      admin: {
+        title: 'मुख्य अॅडमिन कन्सोल · All in One Skill मुंबई',
+        description: '५८ मुंबई झोन, भागीदार मंजुरी, महसूल नियम आणि हीटमॅप व्यवस्थापित करा.',
+      },
+    },
+  };
+  return table[language]?.[view] || table.en[view];
 }

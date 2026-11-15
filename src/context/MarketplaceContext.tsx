@@ -61,6 +61,7 @@ import type {
 interface MarketplaceContextValue {
   user: User | null;
   authReady: boolean;
+  catalogLoading: boolean;
   userAccount: UserAccount | null;
   userPII: UserPrivatePII | null;
   isAdmin: boolean;
@@ -142,6 +143,7 @@ const MarketplaceContext = createContext<MarketplaceContextValue | null>(null);
 export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [catalogLoading, setCatalogLoading] = useState(true);
   const [userAccount, setUserAccount] = useState<UserAccount | null>(null);
   const [userPII, setUserPII] = useState<UserPrivatePII | null>(null);
   const [isAdminDoc, setIsAdminDoc] = useState(false);
@@ -232,6 +234,16 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Public catalog listeners
   useEffect(() => {
     const unsubs: Array<() => void> = [];
+    const pendingCollections = new Set(['technicians', 'shops', 'products', 'contractors', 'projects']);
+    const markCollectionReady = (name: string) => {
+      pendingCollections.delete(name);
+      if (pendingCollections.size === 0) {
+        setCatalogLoading(false);
+      }
+    };
+    const loadingSafetyTimer = window.setTimeout(() => {
+      setCatalogLoading(false);
+    }, 2200);
 
     unsubs.push(
       onSnapshot(
@@ -283,40 +295,70 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     unsubs.push(
       onSnapshot(
         collection(db, 'technicians'),
-        (snap) => setTechnicians(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<TechnicianProfile, 'id'>) }))),
-        (err) => handleFirestoreError(err, OperationType.LIST, 'technicians')
+        (snap) => {
+          setTechnicians(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<TechnicianProfile, 'id'>) })));
+          markCollectionReady('technicians');
+        },
+        (err) => {
+          markCollectionReady('technicians');
+          handleFirestoreError(err, OperationType.LIST, 'technicians');
+        }
       )
     );
 
     unsubs.push(
       onSnapshot(
         collection(db, 'shops'),
-        (snap) => setShops(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ShopProfile, 'id'>) }))),
-        (err) => handleFirestoreError(err, OperationType.LIST, 'shops')
+        (snap) => {
+          setShops(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ShopProfile, 'id'>) })));
+          markCollectionReady('shops');
+        },
+        (err) => {
+          markCollectionReady('shops');
+          handleFirestoreError(err, OperationType.LIST, 'shops');
+        }
       )
     );
 
     unsubs.push(
       onSnapshot(
         collection(db, 'products'),
-        (snap) => setProducts(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Product, 'id'>) }))),
-        (err) => handleFirestoreError(err, OperationType.LIST, 'products')
+        (snap) => {
+          setProducts(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Product, 'id'>) })));
+          markCollectionReady('products');
+        },
+        (err) => {
+          markCollectionReady('products');
+          handleFirestoreError(err, OperationType.LIST, 'products');
+        }
       )
     );
 
     unsubs.push(
       onSnapshot(
         collection(db, 'contractors'),
-        (snap) => setContractors(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ContractorProfile, 'id'>) }))),
-        (err) => handleFirestoreError(err, OperationType.LIST, 'contractors')
+        (snap) => {
+          setContractors(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ContractorProfile, 'id'>) })));
+          markCollectionReady('contractors');
+        },
+        (err) => {
+          markCollectionReady('contractors');
+          handleFirestoreError(err, OperationType.LIST, 'contractors');
+        }
       )
     );
 
     unsubs.push(
       onSnapshot(
         collection(db, 'projects'),
-        (snap) => setProjects(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ProjectRequirement, 'id'>) }))),
-        (err) => handleFirestoreError(err, OperationType.LIST, 'projects')
+        (snap) => {
+          setProjects(snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<ProjectRequirement, 'id'>) })));
+          markCollectionReady('projects');
+        },
+        (err) => {
+          markCollectionReady('projects');
+          handleFirestoreError(err, OperationType.LIST, 'projects');
+        }
       )
     );
 
@@ -328,7 +370,10 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       )
     );
 
-    return () => unsubs.forEach((u) => u());
+    return () => {
+      window.clearTimeout(loadingSafetyTimer);
+      unsubs.forEach((u) => u());
+    };
   }, []);
 
   // Bootstrap initial Mumbai zones & config when Admin logs in
